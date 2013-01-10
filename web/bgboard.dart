@@ -31,9 +31,15 @@ class BgBoard {
   }
 
   // myCheckers and oppCheckers contain the nr's of checkers for each player on each point on the board. Points are numbered from the player's own orientation
-  BoardMap drawPosition(CanvasRenderingContext2D context, Positionrecord position, bool isHomeBoardLeft, double x, double y, double boardWidth, double boardHeight){
-    var boardMap = new BoardMap(x, y, boardWidth, boardHeight, isHomeBoardLeft);
-    
+  void drawPosition(CanvasRenderingContext2D context, Positionrecord position, BoardMap boardMap){  
+    if(!pointPattern.complete) {
+      pointPattern.on.load.add((e) => doDrawPosition(context, position, boardMap));  
+    } else {
+      doDrawPosition(context, position, boardMap);
+    }
+  }
+  
+  void doDrawPosition(CanvasRenderingContext2D context, Positionrecord position, BoardMap boardMap){ 
     this.drawBoard(context, boardMap);
     
     List<int> myCheckers = position.checkers[0];
@@ -79,7 +85,7 @@ class BgBoard {
         arrowX = boardMap.arrowOppTurn;
         color = this.oppCheckerColor;
     }
-    this.drawArrow(context, arrowX, isHomeBoardLeft, color);
+    this.drawArrow(context, arrowX, boardMap.isHomeBoardLeft, color);
   
     Area diceArea;
     if(isItMyTurn) {
@@ -101,8 +107,6 @@ class BgBoard {
       cubeArea = boardMap.cubeOpp;
     }
     this.drawCube(context, cubeArea, position.cubeValue);
-    
-    return boardMap;
   }
   
   // index is the bg pointnumber, indexOnPoint starts with 1
@@ -169,7 +173,7 @@ class BgBoard {
 
   void drawPointNumbers(CanvasRenderingContext2D context, BoardMap boardMap){
     int fontHeight = (boardMap.pointNumberHeight * 0.5).toInt();
-    context.font = "bold {$fontHeight}px sans-serif";
+    context.font = "bold ${fontHeight}px sans-serif";
     
     int pointNumber;
     int increment;
@@ -221,7 +225,7 @@ class BgBoard {
     for (int i = start; i != (end + increment); i += increment) {
         num textWidth = context.measureText(pointNumber.toString()).width;
         double textInset = (pointWidth - textWidth) / 2;
-        context.fillText(pointNumber, startX + i * pointWidth + textInset, baseLine);
+        context.fillText(pointNumber.toString(), startX + i * pointWidth + textInset, baseLine);
         pointNumber += pointNumberIncrement;
     }
   }
@@ -295,13 +299,13 @@ class BgBoard {
     } else {
       fontHeight = (cubeWidth * 0.25).toInt();
     }
-    context.font = "bold {$fontHeight}px sans-serif";
+    context.font = "bold ${fontHeight}px sans-serif";
     
     num textWidth = context.measureText(cubeValue.toString()).width;
     double horizontalTextInset = (cubeWidth - textWidth) / 2;
     double verticalTextInset = cubeWidth/2 + fontHeight/4;
     context.fillStyle = "#000000";
-    context.fillText(cubeValue, realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
+    context.fillText(cubeValue.toString(), realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
   }
   
   // TODO make Die a class of its own?

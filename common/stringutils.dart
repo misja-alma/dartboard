@@ -26,3 +26,11 @@ List<int> stringToBytes(str){
    return result;
  }
 
+ /**
+  * Removes all alphanumerics and then tries a int.parse
+  */ 
+ int forceParseInt(String string) {
+   RegExp regExp = new RegExp(r"[a-z]|[A-Z]");
+   String cleanString = string.replaceAll(regExp, ""); 
+   return int.parse(cleanString);  
+ }

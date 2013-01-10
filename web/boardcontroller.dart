@@ -28,8 +28,8 @@ class BoardController {
     this.bgBoard = new BgBoard();
     this.isHomeBoardLeft = true;
     this.boardElementName = boardName;
-    this.board = query("#{$boardName}");
-    this.board.addEventListener("click", boardClicked, false);
+    this.board = query("#${boardName}");
+    this.board.on.click.add(boardClicked);
   }
 
   void setDirection(bool shouldHomeBoardBeLeft){
@@ -45,7 +45,7 @@ class BoardController {
   }
 
   void handleClick (num x, num y){
-    var item = this.boardMap.locateItem(x, y);
+    Item item = this.boardMap.locateItem(x, y);
     if (item.area == AREA_TURN) {
         this.switchTurn();
         this.draw(this.currentPosition);
@@ -53,8 +53,8 @@ class BoardController {
   }
 
   void boardClicked(MouseEvent event){
-    int x;
-    int y;
+    num x;
+    num y;
     if (event.pageX > 0 || event.pageY > 0) { // TODO check if this makes sense
         x = event.pageX;
         y = event.pageY;
@@ -72,7 +72,8 @@ class BoardController {
   void draw(Positionrecord position){
     this.currentPosition = position;
     CanvasRenderingContext2D context = this.board.getContext("2d");
-    this.boardMap = this.bgBoard.drawPosition(context, position, this.isHomeBoardLeft, 0.0, 0.0, 500.0, 400.0);
+    this.boardMap = new BoardMap(0.0, 0.0, 500.0, 400.0, isHomeBoardLeft);
+    bgBoard.drawPosition(context, position, boardMap);
   }
 
   Positionrecord parseBgId(String id){
@@ -111,7 +112,7 @@ class BoardController {
   }
   
   String getGnuId(position){
-    return "Position ID: {$position.getPositionId()} Match ID: {$position.getMatchId()}";
+    return "Position ID: ${position.getPositionId()} Match ID: ${position.getMatchId()}";
   }
 
   // Calculates the object's absolute position
@@ -122,7 +123,7 @@ class BoardController {
         position.x = object.offsetLeft;
         position.y = object.offsetTop;
         
-        if (object.offsetParent > 0) {
+        if (object.offsetParent != null) {
             Point parentpos = getAbsPosition(object.offsetParent);
             position.x += parentpos.x;
             position.y += parentpos.y;
