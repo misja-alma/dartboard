@@ -8,28 +8,18 @@
   </head>
   <body>
     <h1>Dartboard</h1>
-    
-    <table>
-        <tr>
-            <td colspan=2>
-                <canvas id="bgboard"/>
-            </td>
-        </tr>
-        <tr>
-            <td width=8%/>
-            <td>
-                <input type="text" id="positionId"/>
-            </td>
-        </tr>
-        <tr>
-            <td width=8%/>
-            <td>
-                <input type="checkbox" id="direction" checked="false">Clockwise
-                </input>
-            </td>
-        </tr>
-    </table>
-    <input type="hidden" id="gnuId"/>
+   
+    <canvas id="bgboard"></canvas>
+    <div>
+      <span>Id</span>
+      <input type="text" id="positionId"/>
+      <span>Type</span>
+      <input type="radio" name="idType" value="Gnu" checked>Gnu</input>
+      <input type="radio" name="idType" value="XG"/>XG</input>
+    </div>
+    <div>
+      <input type="checkbox" id="direction" checked="false">Clockwise</input>
+    </div>
         
     <script type="application/dart" src="dartboard.dart"></script>
     <script src="https://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>

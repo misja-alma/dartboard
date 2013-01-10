@@ -20,36 +20,71 @@ void setBoardDimensions() {
 void setDimensionsFromStyle(CanvasElement board, CssStyleDeclaration style) {
   board.width = forceParseInt(style.width);
   board.height = forceParseInt(style.height);
-  reDraw();
+  drawFromPositionId();
 }
 
 void initListeners() {
   Element positionId = query("#positionId");  
-  positionId.on.blur.add((e) => reDraw());
+  positionId.on.blur.add((e) => drawFromPositionId());
   positionId.on.keyPress.add((e) => keyPressedInPositionId(e));
   Element direction = query("#direction");
-  direction.on.click.add((e) => reDraw());
+  direction.on.click.add((e) => drawFromPositionId());
 }
 
-void reDraw(){
+void drawFromPositionId(){
   Element direction = query("#direction");
   BoardController board = getBoard("bgboard");
   board.setDirection(direction.checked);
-  Positionrecord position;
-  String positionId = query("#positionId").value;
-  if (positionId.isEmpty) {
-    position = new Positionrecord.initialPosition();
-  } else {
-    position = xgIdToPosition(positionId); // TODO parse either xgid, or gnu pos + matchid
-  }
+  
+  String selectedIdType = getSelectedIdType();
+  Positionrecord position = convertIdToPosition(selectedIdType);
   board.draw(position);
-  Element txtGnuId = query("#gnuId");
-  txtGnuId.value = "${getPositionId(position)}${getMatchId(position)}";
 }
 
-bool keyPressedInPositionId(KeyEvent event) { // TODO not tested yet
+void showPositionId(String selectedIdType, Positionrecord position) {
+  if(selectedIdType == "XG") {
+    showXgId(position);
+  } else {
+    showGnuId(position);
+  }
+}
+
+Positionrecord convertIdToPosition(String selectedIdType) {
+  String positionId = query("#positionId").value;
+  if (positionId.isEmpty) {
+    Positionrecord position = new Positionrecord.initialPosition();
+    showPositionId(getSelectedIdType(), position);
+    return position;
+  } else {
+    if(selectedIdType == "XG") { 
+      return xgIdToPosition(positionId);
+    } else {
+      return gnuIdToPosition(positionId.substring(0, 14), positionId.substring(14, positionId.length));
+    }
+  }
+}
+
+String getSelectedIdType() {
+  var ids = queryAll("[name=idType]"); // TODO normal selector by name doesnt work?
+  Element selectedType = ids.filter((e) => e.checked).iterator().next(); // TODO is there no find?
+  return selectedType.value;
+}
+
+void showGnuId(Positionrecord position) {
+  Element txtGnuId = query("#positionId");
+  String positionId = getPositionId(position);
+  String matchId = getMatchId(position);
+  txtGnuId.value = "${positionId}${matchId}";
+}
+
+void showXgId(Positionrecord position) {
+  Element txtXgId = query("#positionId");
+  //txtXgId.value = "${getXgId(position)}}"; TODO implement
+}
+
+bool keyPressedInPositionId(KeyboardEvent event) { 
   if (event.keyCode == 13) {
-    reDraw();
+    drawFromPositionId();
     return false;
   } else {
     return true;

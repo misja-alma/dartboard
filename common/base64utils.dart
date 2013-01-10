@@ -9,7 +9,7 @@ final List<int> positions = [2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 0, 1, 22, 23, 8, 
 
 List<int> base64ToBits(String s, int length){
   // first transform the match id into a bit array
-  List<int> bits = new List(72);
+  List<int> bits = new List(88);
   List<int> bytes = stringToBytes(s);
   
   for (int c = 0; c < (s.length / 4 + 1); c++) { // take 4 characters at a time; they will become 3 bytes

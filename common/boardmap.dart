@@ -387,6 +387,21 @@ final String CUBELOCATION_OFFERED = "CUBE_OFFERED";
       }
       return rec;
   }
+  
+  Area getDieArea(Area diceArea, int dieIndex) {
+    double dieWidth = diceArea.height * 0.6;
+    double spaceBetweenDice = dieWidth / 4;
+    double dieXInset = (diceArea.width - 2 * dieWidth - spaceBetweenDice) / 2;
+    Area dieArea = new Area();
+    dieArea.x = diceArea.x + dieXInset;
+    if(dieIndex == 2) {
+      dieArea.x += dieWidth + spaceBetweenDice;
+    }
+    dieArea.y = diceArea.y + (diceArea.height - dieWidth) / 2;
+    dieArea.width = dieWidth;
+    dieArea.height = dieWidth;
+    return dieArea;
+  }
 
   Area getPointArea(int index, bool isHomeBoardUp){
       Area rec;

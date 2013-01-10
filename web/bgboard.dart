@@ -3,6 +3,7 @@ library bgboard;
 import '../common/boardmap.dart';
 import '../common/positionrecord.dart';
 import 'canvasutils.dart';
+import 'die.dart';
 import "dart:html";
 import 'dart:math';
 
@@ -93,8 +94,10 @@ class BgBoard {
     } else {
       diceArea = boardMap.diceOpp;
     }
-    this.drawDie(context, diceArea, 1, position.die1);
-    this.drawDie(context, diceArea, 2, position.die2);
+    Die die1 = new Die(position.die1);
+    die1.draw(context, boardMap, diceArea, 1);
+    Die die2 = new Die(position.die2);
+    die2.draw(context, boardMap, diceArea, 2);
     
     Area cubeArea;
     // TODO find out/handle the case when cube is offered!
@@ -132,7 +135,7 @@ class BgBoard {
     context.fillStyle = "#000";
     double textWidth = context.measureText(total.toString()).width;
     double textInset = (pointWidth - textWidth) / 2;
-    context.fillText(total, coordinates.x + textInset, coordinates.y + boardMap.checkerRadius * 1.4);
+    context.fillText(total.toString(), coordinates.x + textInset, coordinates.y + boardMap.checkerRadius * 1.4);
   }
 
   void drawBoard(CanvasRenderingContext2D context, BoardMap boardMap){
@@ -306,57 +309,6 @@ class BgBoard {
     double verticalTextInset = cubeWidth/2 + fontHeight/4;
     context.fillStyle = "#000000";
     context.fillText(cubeValue.toString(), realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
-  }
-  
-  // TODO make Die a class of its own?
-  Area getDieArea(Area diceArea, int dieIndex) {
-    double dieWidth = diceArea.height * 0.6;
-    double spaceBetweenDice = dieWidth / 4;
-    double dieXInset = (diceArea.width - 2 * dieWidth - spaceBetweenDice) / 2;
-    Area dieArea = new Area();
-    dieArea.x = diceArea.x + dieXInset;
-    if(dieIndex == 2) {
-      dieArea.x += dieWidth + spaceBetweenDice;
-    }
-    dieArea.y = diceArea.y + (diceArea.height - dieWidth) / 2;
-    dieArea.width = dieWidth;
-    dieArea.height = dieWidth;
-    return dieArea;
-  }
-
-  final List<List<List<int>>> pipCoordinates = [
-    [[50, 50]],
-    [[25, 25],[75, 75]],
-    [[25, 25],[50,50],[75,75]],
-    [[25, 25],[75,25],[75,75],[25,75]],
-    [[25, 25],[75,25],[75,75],[25,75],[50,50]],
-    [[25, 25],[75,25],[75,75],[25,75],[25,50],[75,50]]
-  ];
-
-  void drawDie(CanvasRenderingContext2D context, Area diceArea, int dieIndex, int pips) {
-    if(pips == DIE_NONE) {
-      return;
-    }
-    Area dieArea = this.getDieArea(diceArea, dieIndex);
-    fillRoundedRect(context, dieArea, dieArea.width / 8, "#FFFFFF");
-    
-    double radius = dieArea.width / 24;
-    List<List<int>> coordinatesForPips = pipCoordinates[pips-1];
-    for(var i=0; i<coordinatesForPips.length; i++) {
-      List<int> xy = coordinatesForPips[i];
-      var x = xy[0] * dieArea.width / 100 + dieArea.x;
-      var y = xy[1] * dieArea.height / 100 + dieArea.y;
-      this.drawPip(context, x, y, radius, "#000000");
-    }
-  }
-
-  void drawPip(CanvasRenderingContext2D context, double x,  double y, double radius, String color) {
-    context.beginPath();
-    context.arc(x, y, radius, 0, PI * 2, false);
-    context.closePath();
-    context.fillStyle = color;
-    context.stroke();
-    context.fill();
   }
 }
 
