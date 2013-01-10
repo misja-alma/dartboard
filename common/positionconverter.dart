@@ -163,7 +163,6 @@ import 'dart:math';
     int charPos = 27;
     
     // TODO The following code might be more efficiently parsed with the split function
-    // why this does something like ' int == "string" ' compile. Can we force the compiler to be more strict?
     
     int nextAttributePos = xgId.indexOf(":", charPos);
 

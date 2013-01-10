@@ -9,12 +9,39 @@
   <body>
     <h1>Dartboard</h1>
     
-    <p>Hello world from Dart!</p>
-    
-    <div id="container">
-      <p id="text"></p>
-    </div>
+    <table>
+        <tr>
+            <td colspan=2>
+                <canvas id="bgboard" width="500" height="400"/>
+            </td>
+        </tr>
+        <tr>
+            <td width=8%/>
+            <td>
+                <input type="text" id="positionId" size="45" height="20" onBlur="reDraw();" onkeypress="return keyPressedInPositionId(event);"/>
+            </td>
+        </tr>
+        <tr>
+            <td width=8%/>
+            <td>
+                <input type="checkbox" id="direction" checked="false" width="20" height="20" onClick="reDraw()">Clockwise
+                </input>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="gnuId"/>
 
+  <script type="application/dart">
+     void keyPressedInPositionId(event) {
+          if (event.keyCode == 13) {
+              reDraw();
+              return false;
+          }
+          else {
+              return true;
+          }
+      }
+    </script>        
     <script type="application/dart" src="dartboard.dart"></script>
     <script src="https://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>
