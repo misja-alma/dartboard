@@ -14,7 +14,7 @@ class BgBoard {
   
   BgBoard() {
     this.pointPattern = new ImageElement(); 
-    this.pointPattern.src = "images/wood.jpg"; 
+    this.pointPattern.src = "images/wood.jpg"; // TODO the webui compiler doesn't recognize this path .. So we have to copy the images to the out dir.
     this.myCheckerColor = "#FFFF00";
     this.oppCheckerColor = "#00FFFF"; 
   }

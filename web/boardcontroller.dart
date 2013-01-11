@@ -3,134 +3,168 @@ library boardcontroller;
 import '../common/positionrecord.dart';
 import '../common/boardmap.dart';
 import '../common/positionconverter.dart';
+import '../common/mode/boardaction.dart';
+import '../common/mode/boardmode.dart';
+import '../common/mode/editmode.dart';
+import '../common/stringutils.dart';
 import 'canvasutils.dart';
 import 'bgboard.dart';
 import "dart:html";
 
-BoardController theController;
+BgBoard bgBoard;
+BoardMap boardMap;
+bool isHomeBoardLeft;
+String boardElementName;
+CanvasElement board;
+Positionrecord currentPosition;
+Boardmode currentBoardmode;
 
-BoardController getBoard(String boardName){
-  if (theController == null) {
-      theController = new BoardController(boardName);
-  }
-  return theController;
+void main() {
+  initListeners();
+  setBoardDimensions();
 }
 
-class BoardController {
-  BgBoard bgBoard;
-  BoardMap boardMap;
-  bool isHomeBoardLeft;
-  String boardElementName;
-  CanvasElement board;
-  Positionrecord currentPosition;
+initBoard(String boardName) {
+  currentBoardmode = getBoardmode(EDIT_MODE);
+  bgBoard = new BgBoard();
+  isHomeBoardLeft = true;
+  boardElementName = boardName;
+  board = query("#${boardName}");
+  board.on.click.add(boardClicked);
+}
+
+List<String> getBoardmodes() {
+  return getAllBoardmodes();
+}
+
+void setBoardDimensions() {
+  CanvasElement board = query("#bgboard");
+  // HtmlCanvas ignores the css width and height but takes the html attributes instead.
+  // So we have so set them ourselves, using the following callback.
+  board.computedStyle.then((style) => setDimensionsFromStyle(board, style));
+}
+
+void setDimensionsFromStyle(CanvasElement board, CssStyleDeclaration style) {
+  board.width = forceParseInt(style.width);
+  board.height = forceParseInt(style.height);
+  drawFromPositionId();
+}
+
+void initListeners() {
+  Element positionId = query("#positionId");  
+  positionId.on.blur.add((e) => drawFromPositionId());
+  positionId.on.keyPress.add((e) => keyPressedInPositionId(e));
+  Element direction = query("#direction");
+  direction.on.click.add((e) => drawFromPositionId());
+}
+
+void drawFromPositionId(){
+  Element direction = query("#direction");
+  setDirection(direction.checked);
   
-  BoardController(String boardName) {
-    this.bgBoard = new BgBoard();
-    this.isHomeBoardLeft = true;
-    this.boardElementName = boardName;
-    this.board = query("#${boardName}");
-    this.board.on.click.add(boardClicked);
-  }
+  String selectedIdType = getSelectedIdType();
+  Positionrecord position = convertIdToPosition(selectedIdType);
+  draw(position);
+}
 
-  void setDirection(bool shouldHomeBoardBeLeft){
-    this.isHomeBoardLeft = shouldHomeBoardBeLeft;
+void showPositionId(String selectedIdType, Positionrecord position) {
+  if(selectedIdType == "XG") {
+    showXgId(position);
+  } else {
+    showGnuId(position);
   }
-  
-  void switchTurn(){
-    this.currentPosition.switchTurn();
-  }
-  
-  BgBoard getBoard(){
-    return this.bgBoard;
-  }
+}
 
-  void handleClick (num x, num y){
-    Item item = this.boardMap.locateItem(x, y);
-    if (item.area == AREA_TURN) {
-        this.switchTurn();
-        this.draw(this.currentPosition);
-    }
-  }
+void modeSelected(Event event) {
+  SelectElement select = event.target;
+  print("Switching to ${select.value} mode");
+  currentBoardmode = getBoardmode(select.value);
+}
 
-  void boardClicked(MouseEvent event){
-    num x;
-    num y;
-    if (event.pageX > 0 || event.pageY > 0) { // TODO check if this makes sense
-        x = event.pageX;
-        y = event.pageY;
-    }
-    else {
-        x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-        y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-    }
-    Point absPosition = getAbsPosition(board);
-    x -= absPosition.x;
-    y -= absPosition.y;
-    handleClick(x, y);
-  }
-
-  void draw(Positionrecord position){
-    this.currentPosition = position;
-    CanvasRenderingContext2D context = this.board.getContext("2d");
-    this.boardMap = new BoardMap(0.0, 0.0, 500.0, 400.0, isHomeBoardLeft);
-    bgBoard.drawPosition(context, position, boardMap);
-  }
-
-  Positionrecord parseBgId(String id){
-    String posId = parsePositionId(id);
-    if (posId != null) {
-        String xgId = parseXGId(id);
-        return xgIdToPosition(xgId);
-    } else {
-        String matchId = parseMatchId(id);
-        return gnuIdToPosition(posId, matchId);
-    }
-  }
-
-  String parseXGId(xgId){
-    int index = xgId.indexOf("XGID=");
-    if (index >= 0) {
-        return xgId.substring(index + 5);
-    }
-    return null;
-  }
-  
-  String parsePositionId(gnuId){
-    int index = gnuId.indexOf("Position ID: ");
-    if (index >= 0) {
-        return gnuId.substring(index + 13);
-    }
-    return null;
-  }
-  
-  String parseMatchId(gnuId){
-    int index = gnuId.indexOf("Match ID: ");
-    if (index >= 0) {
-        return gnuId.substring(index + 9);
-    }
-    return null;
-  }
-  
-  String getGnuId(position){
-    return "Position ID: ${position.getPositionId()} Match ID: ${position.getMatchId()}";
-  }
-
-  // Calculates the object's absolute position
-  Point getAbsPosition(Element object){ 
-    Point position = new Point(0, 0);
-    
-    if (object != null) {
-        position.x = object.offsetLeft;
-        position.y = object.offsetTop;
-        
-        if (object.offsetParent != null) {
-            Point parentpos = getAbsPosition(object.offsetParent);
-            position.x += parentpos.x;
-            position.y += parentpos.y;
-        }
-    }
-    
+Positionrecord convertIdToPosition(String selectedIdType) {
+  String positionId = query("#positionId").value;
+  if (positionId.isEmpty) {
+    Positionrecord position = new Positionrecord.initialPosition();
+    showPositionId(getSelectedIdType(), position);
     return position;
+  } else {
+    if(selectedIdType == "XG") { 
+      return xgIdToPosition(positionId);
+    } else {
+      return gnuIdToPosition(positionId.substring(0, 14), positionId.substring(14, positionId.length));
+    }
   }
 }
+
+String getSelectedIdType() {
+  var ids = queryAll("[name=idType]"); // TODO normal selector by name doesnt work?
+  Element selectedType = ids.filter((e) => e.checked).iterator().next(); // TODO is there no find?
+  return selectedType.value;
+}
+
+void showGnuId(Positionrecord position) {
+  Element txtGnuId = query("#positionId");
+  String positionId = getPositionId(position);
+  String matchId = getMatchId(position);
+  txtGnuId.value = "${positionId}${matchId}";
+}
+
+void showXgId(Positionrecord position) {
+  Element txtXgId = query("#positionId");
+  //txtXgId.value = "${getXgId(position)}}"; TODO implement
+}
+
+bool keyPressedInPositionId(KeyboardEvent event) { 
+  if (event.keyCode == 13) {
+    drawFromPositionId();
+    return false;
+  } else {
+    return true;
+  }
+}
+
+void setDirection(bool shouldHomeBoardBeLeft){
+  isHomeBoardLeft = shouldHomeBoardBeLeft;
+}
+
+void switchTurn(){
+  currentPosition.switchTurn();
+}
+
+void handleClick(num x, num y){
+  Item item = boardMap.locateItem(x, y);
+  Boardaction action = currentBoardmode.interpretMouseClick(currentPosition, item);
+  
+  switch(action.getName()) {
+    case SWITCH_TURN:
+      switchTurn();
+      draw(currentPosition);
+      break;
+    case NO_ACTION:
+      break;
+    default:
+      throw new Exception("Unknown action: $action");
+  }
+}
+
+void boardClicked(MouseEvent event){
+  Point positionInBoard = getRelativePosition(event, board);
+  handleClick(positionInBoard.x, positionInBoard.y);
+}
+
+void draw(Positionrecord position){
+  currentPosition = position;
+  if(bgBoard == null) {
+    initBoard("bgboard");
+  }
+  CanvasRenderingContext2D context = board.getContext("2d");
+  boardMap = new BoardMap(0.0, 0.0, 500.0, 400.0, isHomeBoardLeft);
+  bgBoard.drawPosition(context, position, boardMap);
+}
+
+String getGnuId(position){
+  return "Position ID: ${position.getPositionId()} Match ID: ${position.getMatchId()}";
+}
+
+
 

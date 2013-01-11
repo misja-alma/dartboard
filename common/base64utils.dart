@@ -4,7 +4,7 @@ import 'bitutils.dart';
 import 'stringutils.dart';
 
 // tables used by match- and positionId code
-final String base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const String base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 final List<int> positions = [2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 0, 1, 22, 23, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21];  
 
 List<int> base64ToBits(String s, int length){

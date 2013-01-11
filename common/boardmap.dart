@@ -1,11 +1,11 @@
 library boardmap;
 
-final String AREA_BAR = "BAR";
-final String AREA_TURN = "TURN";
-final String AREA_CHECKER = "CHECKER";
-final String AREA_DICE = "DICE";
-final String AREA_CUBE = "CUBE";
-final String AREA_BEAROFF = "BEAROFF";
+const String AREA_BAR = "BAR";
+const String AREA_TURN = "TURN";
+const String AREA_CHECKER = "CHECKER";
+const String AREA_DICE = "DICE";
+const String AREA_CUBE = "CUBE";
+const String AREA_BEAROFF = "BEAROFF";
 
 class Item {
   String area;

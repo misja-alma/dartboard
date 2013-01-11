@@ -8,20 +8,30 @@
   </head>
   <body>
     <h1>Dartboard</h1>
-   
-    <canvas id="bgboard"></canvas>
     <div>
-      <span>Id</span>
-      <input type="text" id="positionId"/>
-      <span>Type</span>
-      <input type="radio" name="idType" value="Gnu" checked>Gnu</input>
-      <input type="radio" name="idType" value="XG"/>XG</input>
-    </div>
-    <div>
-      <input type="checkbox" id="direction" checked="false">Clockwise</input>
-    </div>
-        
-    <script type="application/dart" src="dartboard.dart"></script>
+      <canvas id="bgboard"></canvas>
+      <div>
+        <span class="inputelement">Id:</span>
+        <input type="text" id="positionId" class="inputelement"/>
+        <span class="inputelement">type:</span>
+        <input type="radio" id="typeGnu" name="idType" value="Gnu" class="inputelement" checked="true"/>
+        <label for="typeGnu">Gnu</label>
+        <input type="radio" id="typeXg" name="idType" value="XG" class="inputelement"/>
+        <label for="typeGnu">XG</label>
+      </div>
+      <div>
+        <span class="inputelement">Direction:</span>
+        <input type="checkbox" id="direction" checked="false" class="inputelement"/>
+        <label for="direction">Clockwise</label>
+      </div>
+      <div>
+        <span class="inputelement">Mode:</span>
+        <select id="mode" class="inputelement" on-change="modeSelected($event)" template iterate='mode in getBoardmodes()'>
+             <option>{{mode}}</option> 
+        </select>
+      </div>
+    </div>    
+    <script type="application/dart" src="boardcontroller.dart"></script>
     <script src="https://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>
 </html>

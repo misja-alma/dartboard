@@ -1,20 +1,20 @@
 library positionrecord;
 
-final int CENTERED_CUBE = 3;
+const int CENTERED_CUBE = 3;
 
-final int GAMESTATE_NOGAMESTARTED = 0;
-final int GAMESTATE_PLAYING = 1;
-final int GAMESTATE_GAMEOVER = 2;
-final int GAMESTATE_RESIGNED = 3;
+const int GAMESTATE_NOGAMESTARTED = 0;
+const int GAMESTATE_PLAYING = 1;
+const int GAMESTATE_GAMEOVER = 2;
+const int GAMESTATE_RESIGNED = 3;
 
-final int GAMESTATE_ENDBYCUBEDROP = 4;
+const int GAMESTATE_ENDBYCUBEDROP = 4;
 
-final int RESIGNATION_NONE = 0;
-final int RESIGNATION_SINGLE = 1;
-final int RESIGNATION_GAMMON = 2;
-final int RESIGNATION_BACKGAMMON = 3;
+const int RESIGNATION_NONE = 0;
+const int RESIGNATION_SINGLE = 1;
+const int RESIGNATION_GAMMON = 2;
+const int RESIGNATION_BACKGAMMON = 3;
 
-final int DIE_NONE = 0;
+const int DIE_NONE = 0;
 
 class Positionrecord {
   List<List<int>> checkers; // index 0 is the player: 0 or 1. Index 1 counts the points. Dimensions: 2, 26
