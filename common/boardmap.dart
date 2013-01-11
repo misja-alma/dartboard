@@ -12,7 +12,7 @@ class Item {
   String location;
   int side;
   int index;
-  double height;
+  int height;
   
   Item clone() {
     Item newItem = new Item();
@@ -230,10 +230,10 @@ class BoardMap {
               item.side = 0;
               item.index = index;
               if (index <= 12) {
-                  item.height = ((point.y + point.height - y) / (2 * this.checkerRadius)) + 1;
+                  item.height = (((point.y + point.height - y) / (2 * this.checkerRadius))).toInt() + 1;
               }
               else {
-                  item.height = ((y - point.y) / (2 * this.checkerRadius)) + 1;
+                  item.height = (((y - point.y) / (2 * this.checkerRadius))).toInt() + 1;
               }
               return true;
           }
@@ -297,13 +297,13 @@ final String CUBELOCATION_OFFERED = "CUBE_OFFERED";
           item.area = AREA_BEAROFF;
           item.side = 0;
           double bearOffMeTop = this.zeroPointMe.y + this.zeroPointMe.height;
-          item.height = ((bearOffMeTop - y) / this.zeroPointCheckerHeight) + 1;
+          item.height = (((bearOffMeTop - y) / this.zeroPointCheckerHeight)).toInt() + 1;
           return true;
       }
       if (this.zeroPointOpp.contains(x, y)) {
           item.area = AREA_BEAROFF;
           item.side = 1;
-          item.height = ((y - this.zeroPointOpp.y) / this.zeroPointCheckerHeight) + 1;
+          item.height = (((y - this.zeroPointOpp.y) / this.zeroPointCheckerHeight)).toInt() + 1;
           return true;
       }
       return false;
@@ -314,14 +314,14 @@ final String CUBELOCATION_OFFERED = "CUBE_OFFERED";
       if (this.barMe.contains(x, y)) {
           item.area = AREA_BAR;
           item.side = 0;
-          item.height = ((y - this.barMe.y) / this.checkerRadius) + 1;
+          item.height = (((y - this.barMe.y) / this.checkerRadius)).toInt() + 1;
           return true;
       }
       if (this.barOpp.contains(x, y)) {
           item.area = AREA_BAR;
           item.side = 1;
           double barOppTop = this.barOpp.y + this.barOpp.height - 1;
-          item.height = ((barOppTop - y) / this.checkerRadius) + 1;
+          item.height = (((barOppTop - y) / this.checkerRadius)).toInt() + 1;
           return true;
       }
       return false;

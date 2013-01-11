@@ -16,7 +16,7 @@ main() {
         expect(item.area, equals(AREA_CHECKER));
         expect(item.side, equals(0));
         expect(item.index, equals(1));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
   
    test("Test that locateChecker should map location of second checker on point 1 to proper area, index and height", (){
@@ -25,7 +25,7 @@ main() {
         expect(item.area, equals(AREA_CHECKER));
         expect(item.side, equals(0));
         expect(item.index, equals(1));
-        expect(item.height.toInt(), equals(2));
+        expect(item.height, equals(2));
     });
     
     test("Test that locateChecker should map location on point 7 to proper area, index and height", (){
@@ -34,7 +34,7 @@ main() {
         expect(item.area, equals(AREA_CHECKER));
         expect(item.side, equals(0));
         expect(item.index, equals(7));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
     test("Test that locateChecker should map location of second checker on point 13 to proper area, index and height", (){
@@ -43,7 +43,7 @@ main() {
         expect(item.area, equals(AREA_CHECKER));
         expect(item.side, equals(0));
         expect(item.index, equals(13));
-        expect(item.height.toInt(), equals(2));
+        expect(item.height, equals(2));
     });
     
     test("Test that locateChecker should map location on point 19 to proper area, index and height", (){
@@ -52,7 +52,7 @@ main() {
         expect(item.area, equals(AREA_CHECKER));
         expect(item.side, equals(0));
         expect(item.index, equals(19));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
    ///////////////////// locateBar
@@ -62,7 +62,7 @@ main() {
         
         expect(item.area, equals(AREA_BAR));
         expect(item.side, equals(0));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
     test("Test that locateBar should map location in top of opponent's bar area to proper area and height", (){
@@ -70,7 +70,7 @@ main() {
         
         expect(item.area, equals(AREA_BAR));
         expect(item.side, equals(1));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
     test("Test that locateBar should map location in third checker of own bar area to proper area and height", (){
@@ -78,7 +78,7 @@ main() {
         
         expect(item.area, equals(AREA_BAR));
         expect(item.side, equals(0));
-        expect(item.height.toInt(), equals(3));
+        expect(item.height, equals(3));
     });
     
     test("Test that locateBar should map location in third checker of opponent's bar area to proper area and height", (){
@@ -86,7 +86,7 @@ main() {
         
         expect(item.area, equals(AREA_BAR));
         expect(item.side, equals(1));
-        expect(item.height.toInt(), equals(3));
+        expect(item.height, equals(3));
     });
 
     //////////////////////// locateBearOff
@@ -96,7 +96,7 @@ main() {
         
         expect(item.area, equals(AREA_BEAROFF));
         expect(item.side, equals(0));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
     test("Test that locateBearOff should map location in bottom of opponent's bearoff area to proper area and height", (){
@@ -104,7 +104,7 @@ main() {
         
         expect(item.area, equals(AREA_BEAROFF));
         expect(item.side, equals(1));
-        expect(item.height.toInt(), equals(1));
+        expect(item.height, equals(1));
     });
     
     test("Test that locateBearOff should map location in third checker of own bearoff area to proper area and height", (){
@@ -114,7 +114,7 @@ main() {
         
         expect(item.area, equals(AREA_BEAROFF));
         expect(item.side, equals(0));
-        expect(item.height.toInt(), equals(3));
+        expect(item.height, equals(3));
     });
     
     test("Test that locateBearOff should map location in third checker of opponent's bearoff area to proper area and height", (){
@@ -124,6 +124,6 @@ main() {
         
         expect(item.area, equals(AREA_BEAROFF));
         expect(item.side, equals(1));
-        expect(item.height.toInt(), equals(3));
+        expect(item.height, equals(3));
     });
 }

@@ -101,19 +101,29 @@ class Positionrecord {
   * @param point can be 0 (nr of checkers off), 1..24 ( the points numbered for the specified player) or 25 (the bar).
   * @return the number of checkers of the player on the point specified
   */
-  int getNrCheckersOnPoint(player, point) {
+  int getNrCheckersOnPoint(int player, int point) {
     return checkers[player][point];
   }
 
-  void setNrCheckersOnPoint(player, point, nr) {
+  void setNrCheckersOnPoint(int player, int point, int nr) {
     checkers[player][point]= nr;
+  }
+  
+  void playChecker(int player, int from, int to) {
+    checkers[player][from] = checkers[player][from] - 1;
+    checkers[player][to] = checkers[player][to] + 1;
+    int opponent = player == 1? 0: 1;
+    if(checkers[opponent][25 - to] == 1) {
+      checkers[opponent][25 - to] = 0;
+      checkers[opponent][25] = checkers[opponent][25] + 1;
+    }
   }
   
   /**
    * @param onlyMeaningfulDoubles If true, doubles semi DMP scores are not counted as possible
    * @return true if the player with the decisionturn had the cube and the matchscore made doubling possible
    */
-  bool isDoublePossible(onlyMeaningfulDoubles){
+  bool isDoublePossible(bool onlyMeaningfulDoubles){
     if (gameState != GAMESTATE_PLAYING) {
         return false;
     }
@@ -194,8 +204,8 @@ class Positionrecord {
   }
 
   Positionrecord clone(){
-    var p2 = new Positionrecord();
-    for (var i = 0; i < 2; i++) {
+    Positionrecord p2 = new Positionrecord();
+    for (int i = 0; i < 2; i++) {
         arrayCopy(checkers[i], 0, p2.checkers[i], 0, 26);
     }
     p2.matchScore = [matchScore[0], matchScore[1]];
@@ -216,8 +226,8 @@ class Positionrecord {
     return p2;
   }
 
-  void arrayCopy(ar1, start1, ar2, start2, length){
-    for (var i = 0; i < length; i++) {
+  void arrayCopy(List ar1, int start1, List ar2, int start2, int length){
+    for (int i = 0; i < length; i++) {
         ar2[start2++] = ar1[start1++];
     }
   }

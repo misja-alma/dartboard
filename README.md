@@ -3,7 +3,6 @@ Refactoring:
 - positionConverter's methodnames are not consistent
 - gamestate should probably not be part of positionrecord but have its own class? Controller have something like this to 
   determine how to interpret mouseEvents. Maybe there should be both a gameState and an inputMode.
-- have a suit to run all unittests
 - be consequent in using camelcase or not for classnames  
   
 Improvements:  

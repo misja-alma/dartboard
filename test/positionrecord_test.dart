@@ -35,4 +35,26 @@ main() {
    positionRecord.checkers[0][0] = 1;
    expect(positionRecord.checkers[0][0], isNot(clonedPosition.checkers[0][0]));
  });
+ 
+ test('Test that playchecker adjusts position correctly', () {
+   var positionRecord = new Positionrecord.initialPosition();
+   
+   positionRecord.playChecker(0, 13, 11);
+   
+   expect(positionRecord.getNrCheckersOnPoint(0, 13), equals(4));
+   expect(positionRecord.getNrCheckersOnPoint(0, 11), equals(1));
+ });
+ 
+ test('Test that playchecker, when it hits, adjusts position correctly', () {
+   var positionRecord = new Positionrecord.initialPosition();
+   positionRecord.setNrCheckersOnPoint(0, 22, 1);
+   positionRecord.setNrCheckersOnPoint(0, 24, 1);
+   
+   positionRecord.playChecker(1, 6, 3);
+   
+   expect(positionRecord.getNrCheckersOnPoint(1, 6), equals(4));
+   expect(positionRecord.getNrCheckersOnPoint(1, 3), equals(1));
+   expect(positionRecord.getNrCheckersOnPoint(0, 22), equals(0));
+   expect(positionRecord.getNrCheckersOnPoint(0, 25), equals(1));
+ });
 }
