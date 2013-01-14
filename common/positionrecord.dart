@@ -16,7 +16,7 @@ const int RESIGNATION_BACKGAMMON = 3;
 
 const int DIE_NONE = 0;
 
-class Positionrecord {
+class PositionRecord {
   List<List<int>> checkers; // index 0 is the player: 0 or 1. Index 1 counts the points. Dimensions: 2, 26
   int playerOnRoll; // or the player that did roll
   int cubeValue;
@@ -34,11 +34,11 @@ class Positionrecord {
   String player1Name;
   String player2Name;
   
-  Positionrecord() {    
+  PositionRecord() {    
     setDefaultValues();
   } 
   
-  Positionrecord.initialPosition() {
+  PositionRecord.initialPosition() {
     setDefaultValues();
     
     setNrCheckersOnPoint(0, 6, 5);
@@ -63,7 +63,7 @@ class Positionrecord {
   *
   * @return a valid PositionRecord
   */
-  Positionrecord.createFinalPosition() {
+  PositionRecord.createFinalPosition() {
     setDefaultValues();
     
     setNrCheckersOnPoint(0, 0, 15);
@@ -203,8 +203,8 @@ class Positionrecord {
     }
   }
 
-  Positionrecord clone(){
-    Positionrecord p2 = new Positionrecord();
+  PositionRecord clone(){
+    PositionRecord p2 = new PositionRecord();
     for (int i = 0; i < 2; i++) {
         arrayCopy(checkers[i], 0, p2.checkers[i], 0, 26);
     }

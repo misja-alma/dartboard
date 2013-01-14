@@ -13,12 +13,12 @@ import 'dart:math';
  * @param posId the gnu position id
  * @param matchId the gnu match id
  */
-  Positionrecord gnuIdToPosition(String posId, String matchId){
+  PositionRecord gnuIdToPosition(String posId, String matchId){
     posId = posId.trim();
     matchId = matchId.trim();
       
     // first we need to know if player zero or player one is on roll. So dissect the matchId first
-    Positionrecord position = initializePositionFromMatchId(matchId);
+    PositionRecord position = initializePositionFromMatchId(matchId);
     
     // dissect the position id
     List<int> bytes = stringToBytes(posId);
@@ -64,8 +64,8 @@ import 'dart:math';
     return position;
   }
   
-  Positionrecord initializePositionFromMatchId(String matchId) {
-    Positionrecord position = new Positionrecord();
+  PositionRecord initializePositionFromMatchId(String matchId) {
+    PositionRecord position = new PositionRecord();
     // the matchId string looks as follows:
     // every character contains six bits; the bits 5..0 are used.
     // The first character in the string holds bit 2..7; the second bit 0..1 and 12..15; etc.
@@ -99,7 +99,7 @@ import 'dart:math';
   *
   * @return the gnu position id
   */
-  String getPositionId(Positionrecord position){
+  String getPositionId(PositionRecord position){
     List<int> bits = [];
     // make a long bit string
     int player = position.playerOnRoll; 
@@ -125,7 +125,7 @@ import 'dart:math';
   /**
    * @return the gnu match id
    */
-  String getMatchId(Positionrecord position){
+  String getMatchId(PositionRecord position){
     List<int> bits = new List(67);
     
     putIntoBitString(bits, getTwoLogOfCube(position.cubeValue), 0, 4);
@@ -145,9 +145,9 @@ import 'dart:math';
     return makeBase64String(bits, 12);
   }
   
-  Positionrecord xgIdToPosition(String xgId){
+  PositionRecord xgIdToPosition(String xgId){
     xgId = xgId.trim();
-    Positionrecord position = new Positionrecord();
+    PositionRecord position = new PositionRecord();
     
     position.checkers[1][25] = decodeXGCharcode(xgId.charCodeAt(0)).nrCheckers;
     

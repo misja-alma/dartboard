@@ -6,29 +6,29 @@ const String SWITCH_TURN = "Switch turn";
 const String CHECKER_PICKED = "Checker picked";
 const String CHECKER_DROPPED = "Checker dropped";
 
-abstract class Boardaction {
+abstract class BoardAction {
   String getName();  
 }
 
-class SwitchTurnAction extends Boardaction {
+class SwitchTurnAction extends BoardAction {
   String getName() {
     return SWITCH_TURN;
   }
 }
 
-class NoAction extends Boardaction {
+class NoAction extends BoardAction {
   String getName() {
     return NO_ACTION;
   }
 }
 
-class IllegalAction extends Boardaction {
+class IllegalAction extends BoardAction {
   String getName() {
     return ILLEGAL_ACTION;
   }
 }
 
-class CheckerPickedAction extends Boardaction {
+class CheckerPickedAction extends BoardAction {
   int point;
   
   CheckerPickedAction(this.point);
@@ -38,7 +38,7 @@ class CheckerPickedAction extends Boardaction {
   }
 }
 
-class CheckerDroppedAction extends Boardaction {
+class CheckerDroppedAction extends BoardAction {
   int point;
   
   CheckerDroppedAction(this.point);

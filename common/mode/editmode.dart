@@ -5,8 +5,8 @@ import 'boardaction.dart';
 import '../boardmap.dart';
 import '../positionrecord.dart';
 
-class Editmode extends Boardmode {
-  Boardaction interpretMouseClick(Positionrecord position, Item clickedItem) {
+class EditMode extends BoardMode {
+  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem) {
     if (clickedItem.area == AREA_TURN) {
       return new SwitchTurnAction();
     } else {

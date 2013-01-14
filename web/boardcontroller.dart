@@ -16,8 +16,8 @@ BoardMap boardMap;
 bool isHomeBoardLeft;
 String boardElementName;
 CanvasElement board;
-Positionrecord currentPosition;
-Boardmode currentBoardmode;
+PositionRecord currentPosition;
+BoardMode currentBoardmode;
 
 void main() {
   initListeners();
@@ -63,11 +63,11 @@ void drawFromPositionId(){
   setDirection(direction.checked);
   
   String selectedIdType = getSelectedIdType();
-  Positionrecord position = convertIdToPosition(selectedIdType);
+  PositionRecord position = convertIdToPosition(selectedIdType);
   draw(position);
 }
 
-void showPositionId(String selectedIdType, Positionrecord position) {
+void showPositionId(String selectedIdType, PositionRecord position) {
   if(selectedIdType == "XG") {
     showXgId(position);
   } else {
@@ -81,10 +81,10 @@ void modeSelected(Event event) {
   currentBoardmode = getBoardmode(select.value);
 }
 
-Positionrecord convertIdToPosition(String selectedIdType) {
+PositionRecord convertIdToPosition(String selectedIdType) {
   String positionId = query("#positionId").value;
   if (positionId.isEmpty) {
-    Positionrecord position = new Positionrecord.initialPosition();
+    PositionRecord position = new PositionRecord.initialPosition();
     showPositionId(getSelectedIdType(), position);
     return position;
   } else {
@@ -102,14 +102,14 @@ String getSelectedIdType() {
   return selectedType.value;
 }
 
-void showGnuId(Positionrecord position) {
+void showGnuId(PositionRecord position) {
   Element txtGnuId = query("#positionId");
   String positionId = getPositionId(position);
   String matchId = getMatchId(position);
   txtGnuId.value = "${positionId}${matchId}";
 }
 
-void showXgId(Positionrecord position) {
+void showXgId(PositionRecord position) {
   Element txtXgId = query("#positionId");
   //txtXgId.value = "${getXgId(position)}}"; TODO implement
 }
@@ -133,7 +133,7 @@ void switchTurn(){
 
 void handleClick(num x, num y){
   Item item = boardMap.locateItem(x, y);
-  Boardaction action = currentBoardmode.interpretMouseClick(currentPosition, item);
+  BoardAction action = currentBoardmode.interpretMouseClick(currentPosition, item);
   
   switch(action.getName()) {
     case SWITCH_TURN:
@@ -152,7 +152,7 @@ void boardClicked(MouseEvent event){
   handleClick(positionInBoard.x, positionInBoard.y);
 }
 
-void draw(Positionrecord position){
+void draw(PositionRecord position){
   currentPosition = position;
   if(bgBoard == null) {
     initBoard("bgboard");

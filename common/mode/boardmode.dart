@@ -9,14 +9,14 @@ import '../positionrecord.dart';
 const String EDIT_MODE = "edit position";
 const String PLAY_MODE = "play game";
 
-abstract class Boardmode {
-  Boardaction interpretMouseClick(Positionrecord position, Item clickedItem);
+abstract class BoardMode {
+  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem);
 }
 
-Boardmode getBoardmode(String name) {
+BoardMode getBoardmode(String name) {
   switch(name) {
-    case EDIT_MODE: return new Editmode();
-    case PLAY_MODE: return new Playmode();
+    case EDIT_MODE: return new EditMode();
+    case PLAY_MODE: return new PlayMode();
     default:  throw new Exception("Unknown boardmode: $name");
   }
 }

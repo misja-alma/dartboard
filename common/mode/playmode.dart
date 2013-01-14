@@ -7,11 +7,17 @@ import 'movevalidator.dart';
 import '../boardmap.dart';
 import '../positionrecord.dart';
 
-class Playmode extends Boardmode {
-  Movevalidator moveValidator = new Movevalidator();
+class PlayMode extends BoardMode {
+  MoveValidator moveValidator = new MoveValidator();
   
   List<int> alreadyPlayedDice = [];
   int checkerPickedPoint = -1;
+  
+  PlayMode() : this.createWithValidator(new MoveValidator());
+  
+  PlayMode.createWithValidator(MoveValidator moveValidator) {
+    this.moveValidator = moveValidator;
+  }
   
   // States.
   // A. player's turn, B. other's turn, C. nobody's turn. How to know when other is ready with his turn?
@@ -26,7 +32,7 @@ class Playmode extends Boardmode {
   
   // quitting is up to the controller to detect, I guess.
   
-  Boardaction interpretMouseClick(Positionrecord position, Item clickedItem) {
+  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem) {
     // For now:
     // -assume we're playing checkers (and the gamestate allows it)
     // -assume that our side is 0.
@@ -36,7 +42,14 @@ class Playmode extends Boardmode {
     // when picking up: if the checker is one of ours
     // when dropping: if it's a legal place => NOTE: For now we only do a shallow check; i.e. the die is (probably) played, not blocked, etc.
     
-    // We have to keep the halfmoves that we've already played, as well as the state of the checkermove we're in.
+    if(clickedItem.area == AREA_CHECKER) {
+      return checkerAreaClicked(position, clickedItem);
+    }
+    
+    return new NoAction();
+  }
+  
+  BoardAction checkerAreaClicked(PositionRecord position, Item clickedItem) {
     if(checkerPickedPoint >= 0) {
       return checkerPicked(position, clickedItem);
     }
@@ -44,11 +57,11 @@ class Playmode extends Boardmode {
       checkerPickedPoint = clickedItem.index;
       return new CheckerPickedAction(clickedItem.index);
     }
-    
     return new NoAction();
   }
+  
 
-  Boardaction checkerPicked(Positionrecord position, Item clickedItem) {
+  BoardAction checkerPicked(PositionRecord position, Item clickedItem) {
     int moveStart = checkerPickedPoint;
     int moveEnd = clickedItem.index;
     int playedDie = moveValidator.getPlayedDie(alreadyPlayedDice, moveStart, moveEnd, position);

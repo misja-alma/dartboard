@@ -1,10 +1,10 @@
 import '../common/positionconverter.dart';
 import '../common/positionrecord.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
  test('Test getMatchId returns the correct Id for a match with player 1 on roll"', () {
-   Positionrecord positionRecord = new Positionrecord();
+   PositionRecord positionRecord = new PositionRecord();
    positionRecord.playerOnRoll = 1;
    positionRecord.decisionTurn = 1;
    positionRecord.crawford = false;
@@ -18,17 +18,17 @@ main() {
  });
  
  test('Test getPositionId returns the correct Id for an empty position"', () {
-     Positionrecord positionRecord = new Positionrecord();
+     PositionRecord positionRecord = new PositionRecord();
      expect(getPositionId(positionRecord), equals("AAAAAAAAAAAAAA"));
  });
    
  test("Test getPositionId returns the correct Id for the initial position", (){
-   Positionrecord positionRecord = new Positionrecord.initialPosition();
+   PositionRecord positionRecord = new PositionRecord.initialPosition();
    expect(getPositionId(positionRecord), equals("4HPwATDgc/ABMA"));
  });
  
  test("Test thaat initializePositionFromMatchId should dissect moneygame matchid correctly", (){
-   Positionrecord positionRecord = initializePositionFromMatchId("cIgfAAAAAAAA");
+   PositionRecord positionRecord = initializePositionFromMatchId("cIgfAAAAAAAA");
    
    expect(positionRecord.playerOnRoll, equals(1));
    expect(positionRecord.crawford, isFalse);
@@ -38,7 +38,7 @@ main() {
  });
  
  test("Test that initializePositionFromMatchId should dissect match with player 1 on roll correctly", (){
-   Positionrecord positionRecord = initializePositionFromMatchId("cIj/ABAAEAAA");
+   PositionRecord positionRecord = initializePositionFromMatchId("cIj/ABAAEAAA");
    
    expect(positionRecord.decisionTurn, equals(1));
    expect(positionRecord.playerOnRoll, equals(1));
@@ -52,7 +52,7 @@ main() {
  });
  
  test("Test that initializePositionFromMatchId should dissect match with player 1 having rolled 3-2 correctly", (){
-   Positionrecord positionRecord = initializePositionFromMatchId("cInpAAAAAAAA");
+   PositionRecord positionRecord = initializePositionFromMatchId("cInpAAAAAAAA");
    
    expect(positionRecord.decisionTurn, equals(1));
    expect(positionRecord.playerOnRoll, equals(1));
@@ -65,7 +65,7 @@ main() {
  });
 
  test("Test that xgIdToPosition should initialize some middlegame position without errors", (){
-   Positionrecord positionRecord = xgIdToPosition("-a-B--E-B-a-dDB--b-bcb----:1:1:-1:63:0:0:0:3:8");
+   PositionRecord positionRecord = xgIdToPosition("-a-B--E-B-a-dDB--b-bcb----:1:1:-1:63:0:0:0:3:8");
    
    expect(positionRecord.checkers[0][6], equals(5));
    expect(positionRecord.checkers[1][6], equals(2));

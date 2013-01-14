@@ -1,5 +1,5 @@
 import '../common/stringutils.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
  test('Test stringToBytes', () {

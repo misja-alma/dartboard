@@ -1,5 +1,5 @@
 import '../common/boardmap.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
     BoardMap boardMap;

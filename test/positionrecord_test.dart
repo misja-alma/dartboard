@@ -1,9 +1,9 @@
 import '../common/positionrecord.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
  test('Test constructor', () {
-   var positionRecord = new Positionrecord();
+   var positionRecord = new PositionRecord();
    
    expect(positionRecord.cubeValue, equals(1));
    expect(positionRecord.checkers.length, equals(2));
@@ -12,7 +12,7 @@ main() {
  });
  
  test('Test initial position constructor', () {
-   var positionRecord = new Positionrecord.initialPosition();
+   var positionRecord = new PositionRecord.initialPosition();
    
    expect(positionRecord.cubeValue, equals(1));
    expect(positionRecord.checkers.length, equals(2));
@@ -22,7 +22,7 @@ main() {
  });
  
  test('Test that clone returns an identical copy', () {
-   var positionRecord = new Positionrecord.initialPosition();
+   var positionRecord = new PositionRecord.initialPosition();
    
    var clonedPosition = positionRecord.clone();
    for (var player = 0; player < 2; player++) {
@@ -37,7 +37,7 @@ main() {
  });
  
  test('Test that playchecker adjusts position correctly', () {
-   var positionRecord = new Positionrecord.initialPosition();
+   var positionRecord = new PositionRecord.initialPosition();
    
    positionRecord.playChecker(0, 13, 11);
    
@@ -46,7 +46,7 @@ main() {
  });
  
  test('Test that playchecker, when it hits, adjusts position correctly', () {
-   var positionRecord = new Positionrecord.initialPosition();
+   var positionRecord = new PositionRecord.initialPosition();
    positionRecord.setNrCheckersOnPoint(0, 22, 1);
    positionRecord.setNrCheckersOnPoint(0, 24, 1);
    

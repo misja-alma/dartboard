@@ -1,5 +1,5 @@
 import '../common/bitutils.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
  test('Test that setBit sets correct bit with specified value into specified byte', () {

@@ -1,5 +1,5 @@
 import '../common/parseutils.dart';
-import '../packages/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 
 main() {
  test('Test parsePoint', () {
