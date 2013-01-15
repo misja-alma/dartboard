@@ -1,10 +1,13 @@
 library boardaction;
 
+import '../checkerplay.dart';
+
 const String NO_ACTION = "No action";
 const String ILLEGAL_ACTION = "Illegal action";
 const String SWITCH_TURN = "Switch turn";
 const String CHECKER_PICKED = "Checker picked";
 const String CHECKER_DROPPED = "Checker dropped";
+const String CHECKER_PLAY = "Checker play";
 
 abstract class BoardAction {
   String getName();  
@@ -45,5 +48,15 @@ class CheckerDroppedAction extends BoardAction {
   
   String getName() {
     return CHECKER_DROPPED;
+  }
+}
+
+class CheckerplayAction extends BoardAction {
+  Checkerplay checkerplay;
+  
+  CheckerplayAction(this.checkerplay);
+  
+  String getName() {
+    return CHECKER_PLAY;
   }
 }

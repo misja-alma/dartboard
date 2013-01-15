@@ -3,6 +3,7 @@ import '../../common/mode/movevalidator.dart';
 import '../../common/positionrecord.dart';
 import '../../common/boardmap.dart';
 import '../../common/mode/boardaction.dart';
+import '../../common/checkerplay.dart';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
 
@@ -10,7 +11,6 @@ class MockMovevalidator extends Mock implements MoveValidator {}
 
 main() {
   PositionRecord position;
-  Item item;
   PlayMode playmode;
   MockMovevalidator moveValidator;
   
@@ -19,47 +19,30 @@ main() {
     position.playerOnRoll = 0;
     position.die1 = 3;
     position.die2 = 2;
-    item = new Item();
     moveValidator = new MockMovevalidator();
     playmode = new PlayMode.createWithValidator(moveValidator);
   });
   // TODO test pick checkers from bar; item.side comes into play then.
   
   test('Test that picking a checker results in a checkerPickedAction', () {
-    item.area = AREA_CHECKER;
-    item.index = 6;
-    item.height = 3;
-    
-    BoardAction action = playmode.interpretMouseClick(position, item);
+    BoardAction action = clickOnPoint(playmode, position, 6, 3);
     
     expect(action, new isInstanceOf<CheckerPickedAction>());
     expect((action as CheckerPickedAction).point, equals(6));
   });
   
   test('Test that picking an opponent checker results in a NoAction', () {
-    item.area = AREA_CHECKER;
-    item.index = 19;
-    item.height = 3;
-    
-    BoardAction action = playmode.interpretMouseClick(position, item);
+    BoardAction action = clickOnPoint(playmode, position, 19, 3);
     
     expect(action, new isInstanceOf<NoAction>());    
   });
   
   test('Test that after picking a checker, dropping a checker on a valid point results in a checkerDroppedAction', () {
-    item.area = AREA_CHECKER;
-    item.index = 6;
-    item.height = 3;
-    
-    BoardAction action = playmode.interpretMouseClick(position, item);
-    
-    item.area = AREA_CHECKER;
-    item.index = 3;
-    item.height = 0;
+    clickOnPoint(playmode, position, 6, 0);    
     
     moveValidator.when(callsTo('getPlayedDie', anything, anything, anything, anything)).alwaysReturn(3);
     
-    action = playmode.interpretMouseClick(position, item);
+    BoardAction action = clickOnPoint(playmode, position, 3, 0);    
     
     expect(action, new isInstanceOf<CheckerDroppedAction>());
     expect((action as CheckerDroppedAction).point, equals(3)); 
@@ -68,25 +51,39 @@ main() {
   });
   
   test('Test that after picking a checker, dropping a checker on an invalid point results in a IllegalAction', () {    
-    item.area = AREA_CHECKER;
-    item.index = 6;
-    item.height = 3;
-    
-    BoardAction action = playmode.interpretMouseClick(position, item);
-    
-    item.area = AREA_CHECKER;
-    item.index = 3;
-    item.height = 0;
+    clickOnPoint(playmode, position, 6, 0);
     
     moveValidator.when(callsTo('getPlayedDie', anything, anything, anything, anything)).alwaysReturn(DIE_NONE);
     
-    action = playmode.interpretMouseClick(position, item);
+    BoardAction action = clickOnPoint(playmode, position, 3, 0);
     
     expect(action, new isInstanceOf<IllegalAction>());
   });
 
   test('Test that picking and dropping of 2 checkers results in a correct checkerPlayAction', () {
- 
-  });
+    moveValidator.when(callsTo('getPlayedDie', anything, 6, 3, anything)).alwaysReturn(3);
+    moveValidator.when(callsTo('getPlayedDie', anything, 6, 4, anything)).alwaysReturn(2);
+    
+    clickOnPoint(playmode, position, 6, 0);
+    clickOnPoint(playmode, position, 3, 0);
+    
+    clickOnPoint(playmode, position, 6, 0);
+    BoardAction action = clickOnPoint(playmode, position, 4, 0);
+    
+    expect(action, new isInstanceOf<CheckerplayAction>());
+    Checkerplay checkerplay = (action as CheckerplayAction).checkerplay;
+    expect(checkerplay.halfMoves, unorderedEquals([new HalfMove(6, 3), new HalfMove(6, 4)]));
+  }); 
 }
+
+BoardAction clickOnPoint(PlayMode playmode, PositionRecord position, int point, int height) {
+  Item item = new Item();
+  item.area = AREA_CHECKER;
+  item.index = point;
+  item.height = height;
+  
+  return playmode.interpretMouseClick(position, item);
+}
+
+
 

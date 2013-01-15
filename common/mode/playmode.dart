@@ -6,11 +6,13 @@ import 'boardaction.dart';
 import 'movevalidator.dart';
 import '../boardmap.dart';
 import '../positionrecord.dart';
+import '../checkerplay.dart';
 
 class PlayMode extends BoardMode {
   MoveValidator moveValidator = new MoveValidator();
   
   List<int> alreadyPlayedDice = [];
+  List<HalfMove> halfMovesPlayed = [];
   int checkerPickedPoint = -1;
   
   PlayMode() : this.createWithValidator(new MoveValidator());
@@ -49,9 +51,15 @@ class PlayMode extends BoardMode {
     return new NoAction();
   }
   
+  resetCheckerplayState() {
+    List<int> alreadyPlayedDice = [];
+    List<HalfMove> halfMovesPlayed = [];
+    int checkerPickedPoint = -1;  
+  }
+  
   BoardAction checkerAreaClicked(PositionRecord position, Item clickedItem) {
     if(checkerPickedPoint >= 0) {
-      return checkerPicked(position, clickedItem);
+      return checkerDropped(position, clickedItem);
     }
     if(clickedItem.index > 0 && position.getNrCheckersOnPoint(position.playerOnRoll, clickedItem.index) > 0) {
       checkerPickedPoint = clickedItem.index;
@@ -61,7 +69,7 @@ class PlayMode extends BoardMode {
   }
   
 
-  BoardAction checkerPicked(PositionRecord position, Item clickedItem) {
+  BoardAction checkerDropped(PositionRecord position, Item clickedItem) {
     int moveStart = checkerPickedPoint;
     int moveEnd = clickedItem.index;
     int playedDie = moveValidator.getPlayedDie(alreadyPlayedDice, moveStart, moveEnd, position);
@@ -71,7 +79,26 @@ class PlayMode extends BoardMode {
     checkerPickedPoint = -1;
     alreadyPlayedDice.add(playedDie);
     position.playChecker(position.playerOnRoll, moveStart, moveEnd);
-    // TODO if dies are all played, return checkerPlayedAction
-    return new CheckerDroppedAction(moveEnd);
+    halfMovesPlayed.add(new HalfMove(moveStart, moveEnd));
+    
+    if(alreadyPlayedDice.length == getNrOfDice(position)) {
+      return allCheckersPlayed();
+    } else {
+      return new CheckerDroppedAction(moveEnd);
+    }
+  }
+  
+  BoardAction allCheckersPlayed() {
+    Checkerplay checkerplay = new Checkerplay(halfMovesPlayed);
+    resetCheckerplayState();
+    return new CheckerplayAction(checkerplay);
+  }
+  
+  int getNrOfDice(PositionRecord position) {
+    if(position.die1 == position.die2) {
+      return 4;
+    } else {
+      return 2;
+    }
   }
 }
