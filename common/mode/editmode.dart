@@ -6,11 +6,11 @@ import '../boardmap.dart';
 import '../positionrecord.dart';
 
 class EditMode extends BoardMode {
-  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem) {
+  List<BoardAction> interpretMouseClick(PositionRecord position, Item clickedItem) {
     if (clickedItem.area == AREA_TURN) {
-      return new SwitchTurnAction();
-    } else {
-      return new NoAction();
-    }
+      return [new SwitchTurnAction()];
+    } 
+    
+    return [];
   }
 }

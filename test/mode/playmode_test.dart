@@ -17,66 +17,59 @@ main() {
   setUp( (){
     position = new PositionRecord.initialPosition();
     position.playerOnRoll = 0;
-    position.die1 = 3;
-    position.die2 = 2;
+    position.die1 = 6;
+    position.die2 = 5;
     moveValidator = new MockMovevalidator();
     playmode = new PlayMode.createWithValidator(moveValidator);
+    playmode.initializeState(position);
   });
   // TODO test pick checkers from bar; item.side comes into play then.
   
-  test('Test that picking a checker results in a checkerPickedAction', () {
-    BoardAction action = clickOnPoint(playmode, position, 6, 3);
+  test('Test that picking a checker results in a checkerPlayedAction with highest die', () {
+    moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
+
+    BoardAction action = clickOnPointAndExpectOneAction(playmode, position, 24, 1);
     
-    expect(action, new isInstanceOf<CheckerPickedAction>());
-    expect((action as CheckerPickedAction).point, equals(6));
+    expect(action, new isInstanceOf<CheckerPlayedAction>());
+    expect((action as CheckerPlayedAction).playedDie, equals(6));
+    expect((action as CheckerPlayedAction).pointFrom, equals(24));
+    expect((action as CheckerPlayedAction).pointTo, equals(18));
   });
   
   test('Test that picking an opponent checker results in a NoAction', () {
-    BoardAction action = clickOnPoint(playmode, position, 19, 3);
+    List<BoardAction> actions = clickOnPoint(playmode, position, 19, 3);
     
-    expect(action, new isInstanceOf<NoAction>());    
+    expect(actions.length, equals(0));    
   });
   
-  test('Test that after picking a checker, dropping a checker on a valid point results in a checkerDroppedAction', () {
-    clickOnPoint(playmode, position, 6, 0);    
+  test('Test that picking a checker with invalid points for both dice results in  no Action', () {    
+    moveValidator.when(callsTo('validateMove', anything, anything, anything)).alwaysReturn(INVALID_MOVE);
     
-    moveValidator.when(callsTo('getPlayedDie', anything, anything, anything, anything)).alwaysReturn(3);
+    List<BoardAction> action = clickOnPoint(playmode, position, 6, 0);
     
-    BoardAction action = clickOnPoint(playmode, position, 3, 0);    
-    
-    expect(action, new isInstanceOf<CheckerDroppedAction>());
-    expect((action as CheckerDroppedAction).point, equals(3)); 
-    expect(position.getNrCheckersOnPoint(0, 6), equals(4));
-    expect(position.getNrCheckersOnPoint(0, 3), equals(1));
-  });
-  
-  test('Test that after picking a checker, dropping a checker on an invalid point results in a IllegalAction', () {    
-    clickOnPoint(playmode, position, 6, 0);
-    
-    moveValidator.when(callsTo('getPlayedDie', anything, anything, anything, anything)).alwaysReturn(DIE_NONE);
-    
-    BoardAction action = clickOnPoint(playmode, position, 3, 0);
-    
-    expect(action, new isInstanceOf<IllegalAction>());
+    expect(action.length, equals(0));
   });
 
-  test('Test that picking and dropping of 2 checkers results in a correct checkerPlayAction', () {
-    moveValidator.when(callsTo('getPlayedDie', anything, 6, 3, anything)).alwaysReturn(3);
-    moveValidator.when(callsTo('getPlayedDie', anything, 6, 4, anything)).alwaysReturn(2);
+  test('Test that picking the second checker results in a CheckerPlayed- and SwitchTurnAction', () {
+    moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
+    moveValidator.when(callsTo('validateMove', 5, 13, anything)).alwaysReturn(8);
     
-    clickOnPoint(playmode, position, 6, 0);
-    clickOnPoint(playmode, position, 3, 0);
+    clickOnPointAndExpectOneAction(playmode, position, 24, 0);
+    List<BoardAction> actions = clickOnPoint(playmode, position, 13, 0);
     
-    clickOnPoint(playmode, position, 6, 0);
-    BoardAction action = clickOnPoint(playmode, position, 4, 0);
-    
-    expect(action, new isInstanceOf<CheckerplayAction>());
-    Checkerplay checkerplay = (action as CheckerplayAction).checkerplay;
-    expect(checkerplay.halfMoves, unorderedEquals([new HalfMove(6, 3), new HalfMove(6, 4)]));
+    expect(actions.length, equals(2));
+    expect(actions[0], new isInstanceOf<CheckerPlayedAction>());
+    expect(actions[1], new isInstanceOf<SwitchTurnAction>());
   }); 
 }
 
-BoardAction clickOnPoint(PlayMode playmode, PositionRecord position, int point, int height) {
+BoardAction clickOnPointAndExpectOneAction(PlayMode playmode, PositionRecord position, int point, int height) {
+  List<BoardAction> actions = clickOnPoint(playmode, position, point, height);
+  expect(actions.length, equals(1));
+  return actions[0];
+}
+
+List<BoardAction> clickOnPoint(PlayMode playmode, PositionRecord position, int point, int height) {
   Item item = new Item();
   item.area = AREA_CHECKER;
   item.index = point;

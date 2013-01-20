@@ -7,13 +7,16 @@ import 'movevalidator.dart';
 import '../boardmap.dart';
 import '../positionrecord.dart';
 import '../checkerplay.dart';
+import '../gamestate.dart';
+import '../positionutils.dart';
 
 class PlayMode extends BoardMode {
   MoveValidator moveValidator = new MoveValidator();
   
-  List<int> alreadyPlayedDice = [];
+  List<int> diceLeftToPlay = [];
   List<HalfMove> halfMovesPlayed = [];
-  int checkerPickedPoint = -1;
+  
+  GameState gameState = new GameState.newGame();
   
   PlayMode() : this.createWithValidator(new MoveValidator());
   
@@ -21,20 +24,15 @@ class PlayMode extends BoardMode {
     this.moveValidator = moveValidator;
   }
   
-  // States.
-  // A. player's turn, B. other's turn, C. nobody's turn. How to know when other is ready with his turn?
+  // TODO change interface behaviour.
+  // auto-guess picked die; play die immediately from point.
+  // so we only have checkerPlayedActions.
   
-  // Player can be:
-  // playing his checkers -> this is a state in itself.
-  // doubling
-  // rolling
-  // taking
-  // surrendering
-  // Which of these is possible depends on the gamestate and the internal state.
+  // when not playing checkers, clicking the dice area means roll.
+  // when dice are rolled, clicking the dice area means switch dice order.
+  // when a checker has been played, clicking the dice area means nothing.
   
-  // quitting is up to the controller to detect, I guess.
-  
-  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem) {
+  List<BoardAction> interpretMouseClick(PositionRecord position, Item clickedItem) {
     // For now:
     // -assume we're playing checkers (and the gamestate allows it)
     // -assume that our side is 0.
@@ -43,62 +41,54 @@ class PlayMode extends BoardMode {
     // after dropping: if the move is ready
     // when picking up: if the checker is one of ours
     // when dropping: if it's a legal place => NOTE: For now we only do a shallow check; i.e. the die is (probably) played, not blocked, etc.
-    
+        
     if(clickedItem.area == AREA_CHECKER) {
       return checkerAreaClicked(position, clickedItem);
     }
     
-    return new NoAction();
+    return [];
   }
   
-  resetCheckerplayState() {
-    List<int> alreadyPlayedDice = [];
-    List<HalfMove> halfMovesPlayed = [];
-    int checkerPickedPoint = -1;  
+  initializeState(PositionRecord position) {
+    diceLeftToPlay = position.getDiceAsList();
+    halfMovesPlayed = [];  
   }
   
-  BoardAction checkerAreaClicked(PositionRecord position, Item clickedItem) {
-    if(checkerPickedPoint >= 0) {
-      return checkerDropped(position, clickedItem);
+  List<BoardAction> checkerAreaClicked(PositionRecord position, Item clickedItem) {
+    int startingPoint = clickedItem.index;
+    if(clickedItem.index > 0 && position.getNrCheckersOnPoint(position.playerOnRoll, startingPoint) > 0) {      
+      return findValidCheckerMove(startingPoint, position);
     }
-    if(clickedItem.index > 0 && position.getNrCheckersOnPoint(position.playerOnRoll, clickedItem.index) > 0) {
-      checkerPickedPoint = clickedItem.index;
-      return new CheckerPickedAction(clickedItem.index);
-    }
-    return new NoAction();
+    return [];
   }
   
-
-  BoardAction checkerDropped(PositionRecord position, Item clickedItem) {
-    int moveStart = checkerPickedPoint;
-    int moveEnd = clickedItem.index;
-    int playedDie = moveValidator.getPlayedDie(alreadyPlayedDice, moveStart, moveEnd, position);
-    if(DIE_NONE == playedDie) {
-      return new IllegalAction(); 
+  List<BoardAction> findValidCheckerMove(int startingPoint, PositionRecord position) {
+    int player = position.playerOnRoll;
+    for(int index=0; index<diceLeftToPlay.length; index++) {
+      int die = diceLeftToPlay[index];
+      int pointTo = moveValidator.validateMove(die, startingPoint, position); 
+      if(pointTo != INVALID_MOVE) {
+        diceLeftToPlay.removeAt(index);
+        return playCheckerMove(startingPoint, pointTo, die, player, position);  
+      }
     }
-    checkerPickedPoint = -1;
-    alreadyPlayedDice.add(playedDie);
-    position.playChecker(position.playerOnRoll, moveStart, moveEnd);
-    halfMovesPlayed.add(new HalfMove(moveStart, moveEnd));
-    
-    if(alreadyPlayedDice.length == getNrOfDice(position)) {
-      return allCheckersPlayed();
-    } else {
-      return new CheckerDroppedAction(moveEnd);
-    }
+    return [];
   }
   
-  BoardAction allCheckersPlayed() {
-    Checkerplay checkerplay = new Checkerplay(halfMovesPlayed);
-    resetCheckerplayState();
-    return new CheckerplayAction(checkerplay);
+  List<BoardAction> playCheckerMove(int startingPoint, int pointTo, int die, int player, PositionRecord position) {
+    List<BoardAction> result = [];
+    result.add(new CheckerPlayedAction(startingPoint, pointTo, die, player));
+    position.playChecker(player, startingPoint, pointTo);
+    halfMovesPlayed.add(new HalfMove(startingPoint, pointTo));
+    if(diceLeftToPlay.isEmpty) {
+      result.add(fullRollPlayed(position));
+    }
+    return result;
   }
   
-  int getNrOfDice(PositionRecord position) {
-    if(position.die1 == position.die2) {
-      return 4;
-    } else {
-      return 2;
-    }
+  BoardAction fullRollPlayed(PositionRecord position) {
+    gameState.rollFinished();
+    position.playerOnRoll = invertPlayer(position.playerOnRoll);
+    return new SwitchTurnAction();
   }
 }

@@ -1,62 +1,36 @@
 library boardaction;
 
 import '../checkerplay.dart';
-
-const String NO_ACTION = "No action";
-const String ILLEGAL_ACTION = "Illegal action";
-const String SWITCH_TURN = "Switch turn";
-const String CHECKER_PICKED = "Checker picked";
-const String CHECKER_DROPPED = "Checker dropped";
-const String CHECKER_PLAY = "Checker play";
+import '../board.dart';
 
 abstract class BoardAction {
-  String getName();  
+  execute(Board board);
 }
 
 class SwitchTurnAction extends BoardAction {
-  String getName() {
-    return SWITCH_TURN;
+  execute(Board board) {
+    board.switchTurn();
   }
 }
 
 class NoAction extends BoardAction {
-  String getName() {
-    return NO_ACTION;
-  }
+  execute(Board board) {}
 }
 
 class IllegalAction extends BoardAction {
-  String getName() {
-    return ILLEGAL_ACTION;
+  execute(Board board) {}
+}
+
+class CheckerPlayedAction extends BoardAction {
+  int pointFrom;
+  int pointTo;
+  int playedDie;
+  int player;
+  
+  CheckerPlayedAction(this.pointFrom, this.pointTo, this.playedDie, this.player);
+  
+  execute(Board board) {
+    //board.dropChecker(point, player); TODO
   }
 }
 
-class CheckerPickedAction extends BoardAction {
-  int point;
-  
-  CheckerPickedAction(this.point);
-  
-  String getName() {
-    return CHECKER_PICKED;
-  }
-}
-
-class CheckerDroppedAction extends BoardAction {
-  int point;
-  
-  CheckerDroppedAction(this.point);
-  
-  String getName() {
-    return CHECKER_DROPPED;
-  }
-}
-
-class CheckerplayAction extends BoardAction {
-  Checkerplay checkerplay;
-  
-  CheckerplayAction(this.checkerplay);
-  
-  String getName() {
-    return CHECKER_PLAY;
-  }
-}

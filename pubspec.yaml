@@ -4,3 +4,4 @@ version: 0.0.5
 dependencies:
   unittest: any
   web_ui: any
+  browser: any

@@ -10,7 +10,7 @@ const String EDIT_MODE = "edit position";
 const String PLAY_MODE = "play game";
 
 abstract class BoardMode {
-  BoardAction interpretMouseClick(PositionRecord position, Item clickedItem);
+  List<BoardAction> interpretMouseClick(PositionRecord position, Item clickedItem);
 }
 
 BoardMode getBoardmode(String name) {
