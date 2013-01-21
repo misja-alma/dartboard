@@ -4,7 +4,7 @@ import '../common/positionrecord.dart';
 import '../common/board.dart';
 import '../common/boardmap.dart';
 import '../common/positionconverter.dart';
-import '../common/mode/boardaction.dart';
+import '../common/mode/bgaction.dart';
 import '../common/mode/boardmode.dart';
 import '../common/mode/editmode.dart';
 import '../common/stringutils.dart';
@@ -139,23 +139,20 @@ BoardMode currentBoardmode;
   }
   
   void switchTurn(){
-    currentPosition.switchTurn();
     draw(currentPosition);
   }
   
-  void pickUpChecker(int point, int player) {
-    // TODO highlight picked up checker?
+  void checkerPlayed() {
     draw(currentPosition);
   }  
   
-  void dropChecker(int point, int player) {
-    // TODO unhighlight picked up checker?
+  void rolled() {
     draw(currentPosition);
   }
   
   void handleClick(num x, num y){
     Item item = boardMap.locateItem(x, y);
-    List<BoardAction> actions = currentBoardmode.interpretMouseClick(currentPosition, item);
+    List<BGAction> actions = currentBoardmode.interpretMouseClick(currentPosition, item);
     actions.forEach((action) => action.execute(this));
   }
   

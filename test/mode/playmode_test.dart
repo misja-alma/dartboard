@@ -2,7 +2,7 @@ import '../../common/mode/playmode.dart';
 import '../../common/mode/movevalidator.dart';
 import '../../common/positionrecord.dart';
 import '../../common/boardmap.dart';
-import '../../common/mode/boardaction.dart';
+import '../../common/mode/bgaction.dart';
 import '../../common/checkerplay.dart';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
@@ -28,7 +28,7 @@ main() {
   test('Test that picking a checker results in a checkerPlayedAction with highest die', () {
     moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
 
-    BoardAction action = clickOnPointAndExpectOneAction(playmode, position, 24, 1);
+    BGAction action = clickOnPointAndExpectOneAction(playmode, position, 24, 1);
     
     expect(action, new isInstanceOf<CheckerPlayedAction>());
     expect((action as CheckerPlayedAction).playedDie, equals(6));
@@ -37,7 +37,7 @@ main() {
   });
   
   test('Test that picking an opponent checker results in a NoAction', () {
-    List<BoardAction> actions = clickOnPoint(playmode, position, 19, 3);
+    List<BGAction> actions = clickOnPoint(playmode, position, 19, 3);
     
     expect(actions.length, equals(0));    
   });
@@ -45,31 +45,31 @@ main() {
   test('Test that picking a checker with invalid points for both dice results in  no Action', () {    
     moveValidator.when(callsTo('validateMove', anything, anything, anything)).alwaysReturn(INVALID_MOVE);
     
-    List<BoardAction> action = clickOnPoint(playmode, position, 6, 0);
+    List<BGAction> action = clickOnPoint(playmode, position, 6, 0);
     
     expect(action.length, equals(0));
   });
 
-  test('Test that picking the second checker results in a CheckerPlayed- and SwitchTurnAction', () {
+  test('Test that picking the second checker results in a CheckerPlayed- and RollFinishedAction', () {
     moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
     moveValidator.when(callsTo('validateMove', 5, 13, anything)).alwaysReturn(8);
     
     clickOnPointAndExpectOneAction(playmode, position, 24, 0);
-    List<BoardAction> actions = clickOnPoint(playmode, position, 13, 0);
+    List<BGAction> actions = clickOnPoint(playmode, position, 13, 0);
     
     expect(actions.length, equals(2));
     expect(actions[0], new isInstanceOf<CheckerPlayedAction>());
-    expect(actions[1], new isInstanceOf<SwitchTurnAction>());
+    expect(actions[1], new isInstanceOf<RollFinishedAction>());
   }); 
 }
 
-BoardAction clickOnPointAndExpectOneAction(PlayMode playmode, PositionRecord position, int point, int height) {
-  List<BoardAction> actions = clickOnPoint(playmode, position, point, height);
+BGAction clickOnPointAndExpectOneAction(PlayMode playmode, PositionRecord position, int point, int height) {
+  List<BGAction> actions = clickOnPoint(playmode, position, point, height);
   expect(actions.length, equals(1));
   return actions[0];
 }
 
-List<BoardAction> clickOnPoint(PlayMode playmode, PositionRecord position, int point, int height) {
+List<BGAction> clickOnPoint(PlayMode playmode, PositionRecord position, int point, int height) {
   Item item = new Item();
   item.area = AREA_CHECKER;
   item.index = point;

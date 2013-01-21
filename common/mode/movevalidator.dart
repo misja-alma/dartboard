@@ -7,6 +7,7 @@ const int INVALID_MOVE = -1;
 class MoveValidator {
   /**
    * Returns INVALID_MOVE if the move is illegal, otherwise returns the endpoint.
+   * NOTE: playerOnRoll should be checked!
    */ 
   int validateMove(int die, int startingPoint, PositionRecord position) {
     return startingPoint - die; 

@@ -53,7 +53,7 @@ class PositionRecord {
     
     matchScore = [0, 0];
     cubeOwner = 3;
-    playerOnRoll = 1;
+    playerOnRoll = 0;
     cubeValue = 1;
     gameState = GAMESTATE_NOGAMESTARTED;
   }
@@ -110,12 +110,12 @@ class PositionRecord {
   }
   
   void playChecker(int player, int from, int to) {
-    checkers[player][from] = checkers[player][from] - 1;
-    checkers[player][to] = checkers[player][to] + 1;
+    checkers[player][from] -= 1;
+    checkers[player][to] += 1;
     int opponent = player == 1? 0: 1;
     if(checkers[opponent][25 - to] == 1) {
       checkers[opponent][25 - to] = 0;
-      checkers[opponent][25] = checkers[opponent][25] + 1;
+      checkers[opponent][25] += 1;
     }
   }
   

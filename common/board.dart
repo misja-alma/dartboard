@@ -7,7 +7,7 @@ abstract class Board {
   
   void draw(PositionRecord position);
   
-  void pickUpChecker(int point, int player);
+  void checkerPlayed();
   
-  void dropChecker(int point, int player);
+  void rolled();
 }

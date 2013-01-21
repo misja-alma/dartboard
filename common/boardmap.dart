@@ -7,6 +7,10 @@ const String AREA_DICE = "DICE";
 const String AREA_CUBE = "CUBE";
 const String AREA_BEAROFF = "BEAROFF";
 
+const String CUBELOCATION_OWNED = "CUBE_OWNED";
+const String CUBELOCATION_MIDDLE = "CUBE_MIDDLE";
+const String CUBELOCATION_OFFERED = "CUBE_OFFERED";
+
 class Item {
   String area;
   String location;
@@ -240,10 +244,6 @@ class BoardMap {
       }
       return false;
   }
-
-final String CUBELOCATION_OWNED = "CUBE_OWNED";
-final String CUBELOCATION_MIDDLE = "CUBE_MIDDLE";
-final String CUBELOCATION_OFFERED = "CUBE_OFFERED";
 
   bool locateCube(Item item, double x, double y){
     if(this.cubeMe.contains(x, y)) {
