@@ -225,26 +225,6 @@ class PositionRecord {
     
     return p2;
   }
-  
-  List<int> getDiceAsList() {
-    List<int> result = [];
-    if(die1 == die2) {
-      addDie(result, die1);
-      addDie(result, die1);
-      addDie(result, die1);
-      addDie(result, die1);
-    } else {
-      addDie(result, die1);
-      addDie(result, die2);
-    }
-    return result;
-  }
-  
-  addDie(List<int> dice, int die) {
-    if(die != DIE_NONE) {
-      dice.add(die);
-    }
-  }
 
   void arrayCopy(List ar1, int start1, List ar2, int start2, int length){
     for (int i = 0; i < length; i++) {

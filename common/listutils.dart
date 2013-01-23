@@ -1,4 +1,4 @@
-library stringutils;
+library listutils;
 
 List<int> stringToBytes(str){
   List<int> re = [];
@@ -33,4 +33,8 @@ List<int> stringToBytes(str){
    RegExp regExp = new RegExp(r"[a-z]|[A-Z]");
    String cleanString = string.replaceAll(regExp, ""); 
    return int.parse(cleanString);  
+ }
+ 
+ sortDescending(List<Comparable> list) {
+   list.sort((a, b) => b.compareTo(a));
  }

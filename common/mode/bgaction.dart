@@ -64,10 +64,15 @@ class RolledAction extends BGAction {
   int die1;
   int die2;
   int player;
+  PositionRecord position;
+  GameState gameState;
   
-  RolledAction(this.die1, this.die2, this.player);
+  RolledAction(this.position, this.gameState, this.die1, this.die2, this.player);
   
   execute(Board board) {
+    position.die1 = die1;
+    position.die2 = die2;
+    gameState.playerRolled();
     board.checkerPlayed(); 
   }
 }

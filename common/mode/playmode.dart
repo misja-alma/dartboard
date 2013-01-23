@@ -9,10 +9,11 @@ import '../positionrecord.dart';
 import '../checkerplay.dart';
 import '../gamestate.dart';
 import '../positionutils.dart';
+import '../dice.dart';
 
 class PlayMode extends BoardMode {
   MoveValidator moveValidator = new MoveValidator();
-  Random random = new Random();
+  Dice dice = new Dice();
   
   List<int> diceLeftToPlay = [];
   List<HalfMove> halfMovesPlayed = [];
@@ -49,22 +50,9 @@ class PlayMode extends BoardMode {
   }
   
   initializeState(PositionRecord position) {
-    diceLeftToPlay = position.getDiceAsList();
-    gameState = getGameStateFromPosition(position);
+    diceLeftToPlay = getDiceAsList(position.die1, position.die2);
+    gameState = new GameState.fromPosition(position);
     halfMovesPlayed = [];  
-  }
-  
-  GameState getGameStateFromPosition(PositionRecord position) {
-    if(position.die1 != DIE_NONE || position.die2 != DIE_NONE) {
-      return new GameState(STATE_ROLLED);
-    }
-    if(position.cubeOffered) {
-      return new GameState(STATE_TAKE_DECISION);
-    }
-    if(position.gameState == GAMESTATE_NOGAMESTARTED) {
-      return new GameState(STATE_NEW_GAME);
-    }
-    return new GameState(STATE_DOUBLE_DECISION);
   }
   
   List<BGAction> diceAreaClicked(PositionRecord position, Item clickedItem) {
@@ -75,33 +63,9 @@ class PlayMode extends BoardMode {
   }
   
   List<BGAction> roll(PositionRecord position) {
-    List<int> dice = rollDice();
-    position.die1 = dice[0];
-    position.die2 = dice[1];
-    gameState.playerRolled();
-    diceLeftToPlay = expandDoubles(dice);
-    return [new RolledAction(position.die1, position.die2, position.playerOnRoll)];
-  }
-  
-  List<int> expandDoubles(List<int> roll) {
-    if(roll[0] == roll[1]) {
-      return [roll[0], roll[1], roll[0], roll[1]];
-    }
-    return new List.from(roll);
-  }
-  
-  List<int> rollDice() {
-    List<int> result = [rollDie(), rollDie()];
-    sortDescending(result);
-    return result;
-  }
-  
-  sortDescending(List<Comparable> list) {
-    list.sort((a, b) => b.compareTo(a));
-  }
-  
-  int rollDie() {
-    return random.nextInt(6) + 1;
+    List<int> newDice = dice.roll();
+    diceLeftToPlay = expandDoubles(newDice);
+    return [new RolledAction(position, gameState, newDice[0], newDice[1], position.playerOnRoll)];
   }
   
   List<BGAction> checkerAreaClicked(PositionRecord position, Item clickedItem) {

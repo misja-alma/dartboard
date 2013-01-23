@@ -2,7 +2,7 @@ library positionconverter;
 
 import 'positionrecord.dart';
 import 'base64utils.dart';
-import 'stringutils.dart';
+import 'listutils.dart';
 import 'bitutils.dart';
 import 'parseutils.dart';
 import 'dart:math';

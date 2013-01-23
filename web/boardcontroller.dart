@@ -7,7 +7,7 @@ import '../common/positionconverter.dart';
 import '../common/mode/bgaction.dart';
 import '../common/mode/boardmode.dart';
 import '../common/mode/editmode.dart';
-import '../common/stringutils.dart';
+import '../common/listutils.dart';
 import 'canvasutils.dart';
 import 'bgboard.dart';
 import "dart:html";
