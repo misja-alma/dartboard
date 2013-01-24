@@ -1,11 +1,4 @@
-library positionconverter;
-
-import 'positionrecord.dart';
-import 'base64utils.dart';
-import 'listutils.dart';
-import 'bitutils.dart';
-import 'parseutils.dart';
-import 'dart:math';
+part of position;
 
 /**
  * Intitializes the position record with the data stored in the both id's.

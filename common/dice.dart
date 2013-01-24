@@ -1,7 +1,7 @@
 library dice;
 
 import 'dart:math';
-import 'positionrecord.dart';
+import 'position.dart';
 import 'listutils.dart';
 
 class Dice {

@@ -1,6 +1,6 @@
 library board;
 
-import 'positionrecord.dart';
+import 'position.dart';
 
 abstract class Board {
   void switchTurn();

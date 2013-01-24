@@ -1,6 +1,4 @@
-library bitutils;
-
-import 'dart:math';
+part of position;
 
 void setBit(List<int> byteStr, int index, int bitPos, int value){
   int mask = pow(2, bitPos);

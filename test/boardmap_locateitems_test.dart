@@ -1,7 +1,10 @@
 import '../common/boardmap.dart';
+import 'colortestrunner.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
+  useColorTestRunner(); 
+  
     BoardMap boardMap;
     Item item;
     

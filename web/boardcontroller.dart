@@ -1,9 +1,8 @@
 library boardcontroller;
 
-import '../common/positionrecord.dart';
+import '../common/position.dart';
 import '../common/board.dart';
 import '../common/boardmap.dart';
-import '../common/positionconverter.dart';
 import '../common/mode/bgaction.dart';
 import '../common/mode/boardmode.dart';
 import '../common/mode/editmode.dart';

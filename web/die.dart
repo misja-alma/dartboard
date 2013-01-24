@@ -1,7 +1,7 @@
 library die;
 
 import '../common/boardmap.dart';
-import '../common/positionrecord.dart';
+import '../common/position.dart';
 import 'canvasutils.dart';
 import "dart:html";
 import 'dart:math';

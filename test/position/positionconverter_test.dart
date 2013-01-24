@@ -1,8 +1,10 @@
-import '../common/positionconverter.dart';
-import '../common/positionrecord.dart';
+import '../../common/position.dart';
+import '../colortestrunner.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
+ useColorTestRunner(); 
+  
  test('Test getMatchId returns the correct Id for a match with player 1 on roll"', () {
    PositionRecord positionRecord = new PositionRecord();
    positionRecord.playerOnRoll = 1;

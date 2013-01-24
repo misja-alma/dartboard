@@ -1,16 +1,19 @@
 import '../../common/mode/playmode.dart';
 import '../../common/mode/movevalidator.dart';
-import '../../common/positionrecord.dart';
+import '../../common/position.dart';
 import '../../common/boardmap.dart';
 import '../../common/mode/bgaction.dart';
 import '../../common/checkerplay.dart';
 import '../testutils.dart';
+import '../colortestrunner.dart';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
 
 class MockMovevalidator extends Mock implements MoveValidator {}
 
 main() {
+  useColorTestRunner(); 
+  
   PositionRecord position;
   PlayMode playmode;
   MockMovevalidator moveValidator;

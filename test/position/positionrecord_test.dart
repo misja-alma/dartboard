@@ -1,7 +1,10 @@
-import '../common/positionrecord.dart';
+import '../colortestrunner.dart';
+import '../../common/position.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
+ useColorTestRunner(); 
+  
  test('Test constructor', () {
    var positionRecord = new PositionRecord();
    

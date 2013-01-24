@@ -1,7 +1,10 @@
 import '../common/boardmap.dart';
 import 'package:unittest/unittest.dart';
+import 'colortestrunner.dart';
 
 main() {
+  useColorTestRunner(); 
+  
     group("Clockwise board", () {
       BoardMap boardMap;
       Item item;

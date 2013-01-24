@@ -1,6 +1,6 @@
 library testutils;
 
-import '../common/positionrecord.dart';
+import '../common/position.dart';
 
 PositionRecord getInitialPositionWithPlayerOnBar() {
   PositionRecord result = new PositionRecord();

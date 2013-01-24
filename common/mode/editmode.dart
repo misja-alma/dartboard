@@ -3,7 +3,7 @@ library editmode;
 import 'boardmode.dart';
 import 'bgaction.dart';
 import '../boardmap.dart';
-import '../positionrecord.dart';
+import '../position.dart';
 
 class EditMode extends BoardMode {
   List<BGAction> interpretMouseClick(PositionRecord position, Item clickedItem) {

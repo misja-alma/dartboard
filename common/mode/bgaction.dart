@@ -2,7 +2,7 @@ library bgaction;
 
 import '../checkerplay.dart';
 import '../gamestate.dart';
-import '../positionrecord.dart';
+import '../position.dart';
 import '../board.dart';
 import '../positionutils.dart';
 

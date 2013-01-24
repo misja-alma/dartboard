@@ -1,7 +1,7 @@
 library bgboard;
 
 import '../common/boardmap.dart';
-import '../common/positionrecord.dart';
+import '../common/position.dart';
 import 'canvasutils.dart';
 import 'die.dart';
 import "dart:html";

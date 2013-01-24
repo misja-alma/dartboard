@@ -5,7 +5,7 @@ import 'boardmode.dart';
 import 'bgaction.dart';
 import 'movevalidator.dart';
 import '../boardmap.dart';
-import '../positionrecord.dart';
+import '../position.dart';
 import '../checkerplay.dart';
 import '../gamestate.dart';
 import '../positionutils.dart';

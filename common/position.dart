@@ -1,4 +1,12 @@
-library positionrecord;
+library position;
+
+import 'dart:math';
+import 'listutils.dart';
+
+part 'position/base64utils.dart';
+part 'position/parseutils.dart';
+part 'position/bitutils.dart';
+part 'position/positionconverter.dart';
 
 const int CENTERED_CUBE = 3;
 

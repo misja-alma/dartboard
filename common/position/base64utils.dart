@@ -1,7 +1,4 @@
-library base64utils;
-
-import 'bitutils.dart';
-import 'listutils.dart';
+part of position;
 
 // tables used by match- and positionId code
 const String base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

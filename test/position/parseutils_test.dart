@@ -1,7 +1,10 @@
-import '../common/parseutils.dart';
+import '../../common/position.dart';
+import '../colortestrunner.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
+ useColorTestRunner(); 
+  
  test('Test parsePoint', () {
    expect(parsePoint("24"), equals(24));
    expect(parsePoint("bar"), equals(25));

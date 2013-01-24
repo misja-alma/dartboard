@@ -4,7 +4,7 @@ import '../boardmap.dart';
 import 'bgaction.dart';
 import 'editmode.dart';
 import 'playmode.dart';
-import '../positionrecord.dart';
+import '../position.dart';
 
 const String EDIT_MODE = "edit position";
 const String PLAY_MODE = "play game";

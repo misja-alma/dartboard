@@ -1,6 +1,6 @@
 library gamestate;
 
-import 'positionrecord.dart';
+import 'position.dart';
 
 const int STATE_NEW_GAME = 0;
 const int STATE_DOUBLE_DECISION = 1;

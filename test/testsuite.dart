@@ -11,6 +11,7 @@ void main() {
   var lister = new Directory.current().list(recursive: true);
   lister.onFile = (String path) {
     if (path.endsWith("_test.dart")) {
+      // TODO maybe output test file here?
       SendPort sendPort = spawnUri("file://$path");
     }
   };

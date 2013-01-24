@@ -1,7 +1,10 @@
 import '../common/listutils.dart';
 import 'package:unittest/unittest.dart';
+import 'colortestrunner.dart';
 
 main() {
+ useColorTestRunner(); 
+  
  test('Test stringToBytes', () {
    expect(stringToBytes("ABC"), equals([65, 66, 67]));
  });

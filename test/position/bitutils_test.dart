@@ -1,7 +1,10 @@
-import '../common/bitutils.dart';
+import '../../common/position.dart';
+import '../colortestrunner.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
+ useColorTestRunner(); 
+  
  test('Test that setBit sets correct bit with specified value into specified byte', () {
    List<int> bytes = [0, 1, 2];
    

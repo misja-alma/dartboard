@@ -1,6 +1,6 @@
 library movevalidator;
 
-import '../positionrecord.dart';
+import '../position.dart';
 
 const int INVALID_MOVE = -1;
 
