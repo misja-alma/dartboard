@@ -31,7 +31,7 @@ main() {
     });
     
     test('Test that picking a checker results in a checkerPlayedAction with highest die', () {
-      moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
+      moveValidator.when(callsTo('getLandingPoint', 0, 6, 24, anything)).alwaysReturn(18);
   
       BGAction action = clickOnPointAndExpectOneAction(playmode, position, 24, 1);
       
@@ -48,7 +48,7 @@ main() {
     });
     
     test('Test that picking a checker with invalid points for both dice results in  no Action', () {    
-      moveValidator.when(callsTo('validateMove', anything, anything, anything)).alwaysReturn(INVALID_MOVE);
+      moveValidator.when(callsTo('getLandingPoint', anything, anything, anything, anything)).alwaysReturn(INVALID_MOVE);
       
       List<BGAction> action = clickOnPoint(playmode, position, 6, 0);
       
@@ -56,8 +56,8 @@ main() {
     });
   
     test('Test that picking the second checker results in a CheckerPlayed- and RollFinishedAction', () {
-      moveValidator.when(callsTo('validateMove', 6, 24, anything)).alwaysReturn(18);
-      moveValidator.when(callsTo('validateMove', 5, 13, anything)).alwaysReturn(8);
+      moveValidator.when(callsTo('getLandingPoint', 0, 6, 24, anything)).alwaysReturn(18);
+      moveValidator.when(callsTo('getLandingPoint', 0, 5, 13, anything)).alwaysReturn(8);
       
       clickOnPointAndExpectOneAction(playmode, position, 24, 0);
       List<BGAction> actions = clickOnPoint(playmode, position, 13, 0);
@@ -84,8 +84,8 @@ main() {
     });
     
     test('Test that picking a checker from the bar results in a checkerPlayedAction with the only possible die', () {
-      moveValidator.when(callsTo('validateMove', 6, 25, anything)).alwaysReturn(INVALID_MOVE);
-      moveValidator.when(callsTo('validateMove', 5, 25, anything)).alwaysReturn(20);
+      moveValidator.when(callsTo('getLandingPoint', 0, 6, 25, anything)).alwaysReturn(INVALID_MOVE);
+      moveValidator.when(callsTo('getLandingPoint', 0, 5, 25, anything)).alwaysReturn(20);
       
       BGAction action = clickOnPointAndExpectOneAction(playmode, position, 25, 1);
       

@@ -141,11 +141,11 @@ BoardMode currentBoardmode;
     draw(currentPosition);
   }
   
-  void checkerPlayed() {
+  void checkerPlayed(int player, int from, int to) {
     draw(currentPosition);
   }  
   
-  void rolled() {
+  void rolled(int die1, int die2) {
     draw(currentPosition);
   }
   

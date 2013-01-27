@@ -4,7 +4,7 @@ import 'package:unittest/unittest.dart';
 import 'dart:io';
 
 
-//Usage: useColorTestRunner(); TODO doesnt work in editor (yet?)
+//Usage: useColorTestRunner(); TODO doesnt work in editor (yet?) Also doesn't work well when called from testuite, because of spawnProcess
 
 /// Overrides default Configuration to provide colorful command line
 /// output when tests are run. Loosely based on RSpec (https://www.relishapp.com/rspec).

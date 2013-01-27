@@ -83,7 +83,7 @@ class PlayMode extends BoardMode {
     int player = position.playerOnRoll;
     for(int index=0; index<diceLeftToPlay.length; index++) {
       int die = diceLeftToPlay[index];
-      int pointTo = moveValidator.validateMove(die, startingPoint, position); 
+      int pointTo = moveValidator.getLandingPoint(player, die, startingPoint, position); 
       if(pointTo != INVALID_MOVE) {
         diceLeftToPlay.removeAt(index);
         return playCheckerMove(startingPoint, pointTo, die, player, position);  
@@ -94,7 +94,7 @@ class PlayMode extends BoardMode {
   
   List<BGAction> playCheckerMove(int startingPoint, int pointTo, int die, int player, PositionRecord position) {
     List<BGAction> result = [];
-    result.add(new CheckerPlayedAction(position, startingPoint, pointTo, die, player));
+    result.add(new CheckerPlayedAction(position: position, pointFrom: startingPoint, pointTo: pointTo, playedDie: die, player: player));
     halfMovesPlayed.add(new HalfMove(startingPoint, pointTo));
     if(diceLeftToPlay.isEmpty) {
       result.add(fullRollPlayed(position));

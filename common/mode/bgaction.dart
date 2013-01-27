@@ -36,11 +36,11 @@ class CheckerPlayedAction extends BGAction {
   int player;
   PositionRecord position;
   
-  CheckerPlayedAction(this.position, this.pointFrom, this.pointTo, this.playedDie, this.player);
+  CheckerPlayedAction({this.position, this.pointFrom, this.pointTo, this.playedDie, this.player});
   
   execute(Board board) {
     position.playChecker(player, pointFrom, pointTo);
-    board.draw(position); 
+    board.checkerPlayed(player, pointFrom, pointTo); 
   }
 }
 
@@ -73,7 +73,7 @@ class RolledAction extends BGAction {
     position.die1 = die1;
     position.die2 = die2;
     gameState.playerRolled();
-    board.checkerPlayed(); 
+    board.rolled(die1, die2); 
   }
 }
 
