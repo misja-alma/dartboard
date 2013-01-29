@@ -1,9 +1,9 @@
-import '../colortestrunner.dart';
+import 'package:unittest/html_enhanced_config.dart';
 import '../../common/position.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
- useColorTestRunner(); 
+  useHtmlEnhancedConfiguration(); 
   
  test('Test constructor', () {
    var positionRecord = new PositionRecord();

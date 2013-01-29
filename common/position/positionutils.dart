@@ -1,4 +1,4 @@
-library positionutils;
+part of position;
 
 int invertPlayer(int player) {
   return player ^ 1;
@@ -13,4 +13,13 @@ int convertMyPointForPlayerOnRoll(int point, int player) {
     return point;
   }
   return 25 - point;
+}
+
+int getFurthestChecker(int player, PositionRecord position) {
+  for(int i=25; i>0; i--) {
+    if(position.getNrCheckersOnPoint(player, i) > 0) {
+      return i;
+    }
+  }
+  return 0;
 }

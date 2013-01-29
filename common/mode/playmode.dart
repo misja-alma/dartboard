@@ -8,7 +8,6 @@ import '../boardmap.dart';
 import '../position.dart';
 import '../checkerplay.dart';
 import '../gamestate.dart';
-import '../positionutils.dart';
 import '../dice.dart';
 
 class PlayMode extends BoardMode {
@@ -30,13 +29,34 @@ class PlayMode extends BoardMode {
   // when dice are rolled, clicking the dice area means switch dice order.
   // when a checker has been played, clicking the dice area means nothing.
   List<BGAction> interpretMouseClick(PositionRecord position, Item clickedItem) {
-    if(possibleDiceRoll(clickedItem)) {
-      return diceAreaClicked(position, clickedItem);
+    if(gameState.isRollingPossible() && possibleDiceRoll(clickedItem)) {
+      return roll(position);
     }    
-    if(clickedItem.area == AREA_CHECKER) {
-      return checkerAreaClicked(position, clickedItem);
+    if(gameState.isCheckerPlayPossible()) {
+      if(isRollBlocked(position)) {
+        if(!moveValidator.isValidMove(halfMovesPlayed, position)) {
+          return [new IllegalAction()];
+        }
+        diceLeftToPlay = [];
+        halfMovesPlayed = [];
+        return [fullRollPlayed(position)]; 
+      }
+      if(clickedItem.area == AREA_CHECKER || clickedItem.area == AREA_BAR) {
+        return checkerAreaClicked(position, clickedItem);
+      }
     }
     return [];
+  }
+  
+  bool isRollBlocked(PositionRecord position) {
+    int player = position.playerOnRoll;
+    Set<int> distinctDiceLeft = new Set.from(diceLeftToPlay);
+    for(int die in distinctDiceLeft) {
+      if(!moveValidator.isDieBlocked(player, die, position)) {
+        return false;
+      }
+    }
+    return true;
   }
   
   bool possibleDiceRoll(Item item) {
@@ -55,13 +75,6 @@ class PlayMode extends BoardMode {
     halfMovesPlayed = [];  
   }
   
-  List<BGAction> diceAreaClicked(PositionRecord position, Item clickedItem) {
-    if(!gameState.isRollingPossible()) {
-      return [];
-    }
-    return roll(position);
-  }
-  
   List<BGAction> roll(PositionRecord position) {
     List<int> newDice = dice.roll();
     diceLeftToPlay = expandDoubles(newDice);
@@ -69,14 +82,19 @@ class PlayMode extends BoardMode {
   }
   
   List<BGAction> checkerAreaClicked(PositionRecord position, Item clickedItem) {
-    if(!gameState.isCheckerPlayPossible()) {
-      return [];
-    }
-    int startingPoint = convertMyPointForPlayerOnRoll(clickedItem.index, position.playerOnRoll);
+    int startingPoint = getStartingPoint(clickedItem, position);
     if(startingPoint > 0 && position.getNrCheckersOnPoint(position.playerOnRoll, startingPoint) > 0) {      
       return findValidCheckerMove(startingPoint, position);
     }
     return [];
+  }
+
+  int getStartingPoint(Item clickedItem, PositionRecord position) {
+    if(clickedItem.area == AREA_CHECKER) {
+      return convertMyPointForPlayerOnRoll(clickedItem.index, position.playerOnRoll);
+    } else {
+      return 25;
+    }
   }
   
   List<BGAction> findValidCheckerMove(int startingPoint, PositionRecord position) {
@@ -95,11 +113,18 @@ class PlayMode extends BoardMode {
   List<BGAction> playCheckerMove(int startingPoint, int pointTo, int die, int player, PositionRecord position) {
     List<BGAction> result = [];
     result.add(new CheckerPlayedAction(position: position, pointFrom: startingPoint, pointTo: pointTo, playedDie: die, player: player));
-    halfMovesPlayed.add(new HalfMove(startingPoint, pointTo));
+    halfMovesPlayed.add(new HalfMove(startingPoint, pointTo, isHit(player, pointTo, position)));
     if(diceLeftToPlay.isEmpty) {
       result.add(fullRollPlayed(position));
     }
     return result;
+  }
+  
+  bool isHit(int player, int point, PositionRecord position) {
+    if(point == 0) {
+      return false;
+    }
+    return (position.getNrCheckersOnPoint(invertPlayer(player), 25 - point) == 1);
   }
   
   BGAction fullRollPlayed(PositionRecord position) {

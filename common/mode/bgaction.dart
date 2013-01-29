@@ -4,7 +4,6 @@ import '../checkerplay.dart';
 import '../gamestate.dart';
 import '../position.dart';
 import '../board.dart';
-import '../positionutils.dart';
 
 abstract class BGAction {
   execute(Board board);

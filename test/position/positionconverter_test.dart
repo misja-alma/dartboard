@@ -1,9 +1,9 @@
 import '../../common/position.dart';
-import '../colortestrunner.dart';
+import 'package:unittest/html_enhanced_config.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
- useColorTestRunner(); 
+  useHtmlEnhancedConfiguration();
   
  test('Test getMatchId returns the correct Id for a match with player 1 on roll"', () {
    PositionRecord positionRecord = new PositionRecord();

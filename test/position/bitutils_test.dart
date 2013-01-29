@@ -1,9 +1,9 @@
 import '../../common/position.dart';
-import '../colortestrunner.dart';
+import 'package:unittest/html_enhanced_config.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
- useColorTestRunner(); 
+  useHtmlEnhancedConfiguration();
   
  test('Test that setBit sets correct bit with specified value into specified byte', () {
    List<int> bytes = [0, 1, 2];

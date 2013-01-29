@@ -1,14 +1,14 @@
 import '../../common/board.dart';
 import '../../common/position.dart';
 import '../../common/mode/bgaction.dart';
-import '../colortestrunner.dart';
+//import 'package:unittest/html_enhanced_config.dart';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
 
 class MockBoard extends Mock implements Board {}
 
 main() {
-  useColorTestRunner(); 
+  //useHtmlEnhancedConfiguration();
   
   PositionRecord position;
   MockBoard board = new MockBoard();

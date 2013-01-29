@@ -1,9 +1,9 @@
 import '../common/boardmap.dart';
 import 'package:unittest/unittest.dart';
-import 'colortestrunner.dart';
+import 'package:unittest/html_enhanced_config.dart';
 
 main() {
-  useColorTestRunner(); 
+  useHtmlEnhancedConfiguration();
   
     group("Clockwise board", () {
       BoardMap boardMap;

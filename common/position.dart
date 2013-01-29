@@ -7,6 +7,7 @@ part 'position/base64utils.dart';
 part 'position/parseutils.dart';
 part 'position/bitutils.dart';
 part 'position/positionconverter.dart';
+part 'position/positionutils.dart';
 
 const int CENTERED_CUBE = 3;
 

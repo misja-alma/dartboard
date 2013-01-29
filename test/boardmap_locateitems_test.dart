@@ -1,9 +1,9 @@
 import '../common/boardmap.dart';
-import 'colortestrunner.dart';
+import 'package:unittest/html_enhanced_config.dart';
 import 'package:unittest/unittest.dart';
 
 main() {
-  useColorTestRunner(); 
+  useHtmlEnhancedConfiguration();
   
     BoardMap boardMap;
     Item item;
