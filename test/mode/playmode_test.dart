@@ -14,8 +14,6 @@ class MockMovevalidator extends Mock implements MoveValidator {}
 
 class MockBoard extends Mock implements Board {}
 
-// TODO BUG:
-// on the bar, throw is say 6-3; first checker enters forced on 3; second halfmove is now canceled ..
 main() {
 //  useHtmlEnhancedConfiguration();
   

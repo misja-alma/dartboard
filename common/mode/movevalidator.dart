@@ -30,11 +30,17 @@ class MoveValidator {
     return true;
   }
   
-  Set<int> getPossibleStartingPoints(int player, PositionRecord position) {
+  List<int> getPossibleStartingPoints(int player, PositionRecord position) {
     if(position.getNrCheckersOnPoint(player, 25) > 0) {
-      return new Set.from([25]);
+      return [25];
     }
-    return new Set.from(position.checkers[player]);  
+    List<int> result = [];
+    for(int point=1; point<25; point++) {
+      if(position.getNrCheckersOnPoint(player, point) > 0) {
+        result.add(point);
+      }
+    }
+    return result;
   }
   
   /**

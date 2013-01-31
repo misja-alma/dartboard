@@ -58,6 +58,46 @@ main() {
       expect(landingPoint, equals(INVALID_MOVE));
     });
   });
+  
+  group("isDieBlocked", () {
+    
+    setUp( (){
+      position = new PositionRecord();
+      position.setNrCheckersOnPoint(0, 6, 12);
+      position.setNrCheckersOnPoint(0, 5, 3);
+      
+      position.setNrCheckersOnPoint(1, 24, 12);
+      position.setNrCheckersOnPoint(1, 23, 2);
+      position.setNrCheckersOnPoint(1, 25, 1);
+    });
+    
+    test('should return false if there is a point where the die can be played from', () {
+      int player = 0;
+      int die = 3;
+      
+      bool blocked = moveValidator.isDieBlocked(player, die, position);
+      
+      expect(blocked, equals(false));
+    });
+    
+    test('should return true if there is no point where the die can be played from', () {
+      int player = 0;
+      int die = 4;
+      
+      bool blocked = moveValidator.isDieBlocked(player, die, position);
+      
+      expect(blocked, equals(true));
+    });
+    
+    test('should return true if there is the player is on the bar and the die does not enter', () {
+      int player = 1;
+      int die = 6;
+      
+      bool blocked = moveValidator.isDieBlocked(player, die, position);
+      
+      expect(blocked, equals(true));
+    });
+});
 }
 
 
