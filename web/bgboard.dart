@@ -9,26 +9,25 @@ import 'dart:math';
 
 class BgBoard {
   ImageElement pointPattern;
-  String myCheckerColor;
-  String oppCheckerColor;
+  String myCheckerColor = "#FFFF00";
+  String oppCheckerColor = "#00FFFF";
+  String undoColor = "FF0000";
   
   BgBoard() {
-    this.pointPattern = new ImageElement(); 
-    this.pointPattern.src = "images/wood.jpg"; // TODO the webui compiler doesn't recognize this path .. So we have to copy the images to the out dir.
-    this.myCheckerColor = "#FFFF00";
-    this.oppCheckerColor = "#00FFFF"; 
+    pointPattern = new ImageElement(); 
+    pointPattern.src = "images/wood.jpg"; // TODO the webui compiler doesn't recognize this path .. So we have to copy the images to the out dir. 
   }
 
   void setPointPatternImage(pointPatternImage) {
-    this.pointPattern = pointPatternImage;
+    pointPattern = pointPatternImage;
   }
   
   void setMyCheckerColor(color) {
-    this.myCheckerColor = color;
+    myCheckerColor = color;
   }
   
   void setOppCheckerColor(color) {
-    this.oppCheckerColor = color;
+    oppCheckerColor = color;
   }
 
   // myCheckers and oppCheckers contain the nr's of checkers for each player on each point on the board. Points are numbered from the player's own orientation
@@ -110,6 +109,8 @@ class BgBoard {
       cubeArea = boardMap.cubeOpp;
     }
     this.drawCube(context, cubeArea, position.cubeValue);
+    
+    drawUndo(context, boardMap.undo, undoColor);
   }
   
   // index is the bg pointnumber, indexOnPoint starts with 1
@@ -190,11 +191,11 @@ class BgBoard {
     }
     double baseLine = boardMap.board.y + boardMap.board.height + boardMap.pointNumberHeight * 0.6;
     double startX = boardMap.board.x;
-    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
+    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
     pointNumber += 6 * increment;
     
     startX = boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2;
-    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
+    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
     
     if (boardMap.isHomeBoardLeft) {
         pointNumber = 13;
@@ -204,11 +205,11 @@ class BgBoard {
     }
     
     baseLine = boardMap.board.y - boardMap.pointNumberHeight * 0.25;
-    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
+    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
     pointNumber += 6 * increment;
     
     startX = boardMap.board.x;
-    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
+    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
   }
 
   void draw6PointNumbers(CanvasRenderingContext2D context, int pointNumber, int pointNumberIncrement, double startX, double baseLine, double pointWidth, bool fromLeftToRight){
@@ -309,6 +310,34 @@ class BgBoard {
     double verticalTextInset = cubeWidth/2 + fontHeight/4;
     context.fillStyle = "#000000";
     context.fillText(cubeValue.toString(), realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
+  }
+  
+  void drawUndo(CanvasRenderingContext2D context, Area undoArea, String color) {
+    double height = undoArea.height;
+    double width = undoArea.width;
+    double x = undoArea.x + width / 12;
+    double y = undoArea.y;
+    
+    context.fillStyle = color;
+    context.beginPath();
+    context.moveTo(x + width / 12, y + height * 5 / 12);
+    context.lineTo(x, y + height / 3);
+    context.lineTo(x, y + height * 2 / 3);
+    context.lineTo(x + width / 3, y + height * 2 / 3);
+    context.lineTo(x + width / 4, y + height * 7 / 12);
+    context.closePath();
+    context.fill();
+    
+    // draw curved part of arrow; 
+    context.beginPath();
+    context.moveTo(x + width / 12, y + height * 5 / 12);
+    context.quadraticCurveTo(x + width, y, x + width * 2 / 5, y + height);
+    
+    context.quadraticCurveTo(x + width * 4 / 5, y + height / 5, x + width / 4, y + height * 7 / 12);
+    context.moveTo(x + width / 12, y + height * 5 / 12);
+    context.closePath();
+   
+    context.fill();
   }
 }
 

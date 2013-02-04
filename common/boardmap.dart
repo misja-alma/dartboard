@@ -6,6 +6,7 @@ const String AREA_CHECKER = "CHECKER";
 const String AREA_DICE = "DICE";
 const String AREA_CUBE = "CUBE";
 const String AREA_BEAROFF = "BEAROFF";
+const String AREA_UNDO = "UNDO";
 
 const String CUBELOCATION_OWNED = "CUBE_OWNED";
 const String CUBELOCATION_MIDDLE = "CUBE_MIDDLE";
@@ -93,135 +94,142 @@ class BoardMap {
   Area cubeMiddle;
   Area cubeOfferedByMe;
   Area cubeOfferedByOpp;
+  Area undo;
   
-  BoardMap(double x, double y, double width, double height, bool isHomeBoardLeft){
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  BoardMap(double boardX, double boardY, double boardWidth, double boardHeight, bool isHomeBoardLeft){
+    x = boardX;
+    y = boardY;
+    width = boardWidth;
+    height = boardHeight;
     
     this.isHomeBoardLeft = isHomeBoardLeft;
-    this.pointNumberHeight = height / 14;
-    this.bearOffMarginWidth = width / 14;
-    this.cubeMarginWidth = width / 8;
+    pointNumberHeight = height / 14;
+    bearOffMarginWidth = width / 14;
+    cubeMarginWidth = width / 8;
     
-    this.board = new Area();
+    board = new Area();
     if (isHomeBoardLeft) {
-      this.board.x = x + this.bearOffMarginWidth;
+      board.x = x + bearOffMarginWidth;
     } else {
-      this.board.x = x + this.cubeMarginWidth;
+      board.x = x + cubeMarginWidth;
     }
-    this.board.y = y + this.pointNumberHeight;
-    this.board.width = width - this.bearOffMarginWidth - this.cubeMarginWidth;
-    this.board.height = height - 2 * this.pointNumberHeight;
+    board.y = y + pointNumberHeight;
+    board.width = width - bearOffMarginWidth - cubeMarginWidth;
+    board.height = height - 2 * pointNumberHeight;
     
-    this.bar = new Area();
-    this.bar.width = this.getBarWidth(this.board.width);
-    this.bar.height = this.board.height;
-    this.bar.x = this.board.x + this.board.width / 2 - this.bar.width / 2;
-    this.bar.y = this.board.y;
+    bar = new Area();
+    bar.width = getBarWidth(board.width);
+    bar.height = board.height;
+    bar.x = board.x + board.width / 2 - bar.width / 2;
+    bar.y = board.y;
     
-    this.pointWidth = this.getPointWidth(this.board.width);
-    this.checkerRadius = (this.pointWidth / 2.2);
-    this.pointHeight = this.checkerRadius * 10;
+    pointWidth = getPointWidth(board.width);
+    checkerRadius = (pointWidth / 2.2);
+    pointHeight = checkerRadius * 10;
     
-    this.arrowMyTurn = new Area();
-    this.arrowOppTurn = new Area();
+    arrowMyTurn = new Area();
+    arrowOppTurn = new Area();
     
-    double arrowWidth = this.cubeMarginWidth - 2;
-    double arrowHeight = this.board.height / 5;
-    double arrowX = isHomeBoardLeft ? this.board.x + this.board.width + 1 : this.x + 1;
+    double arrowWidth = cubeMarginWidth - 2;
+    double arrowHeight = board.height / 5;
+    double arrowX = isHomeBoardLeft ? board.x + board.width + 1 : x + 1;
     
-    this.arrowMyTurn.x = arrowX;
-    this.arrowMyTurn.y = this.board.y + (this.board.height * 3) / 5;
-    this.arrowMyTurn.width = arrowWidth;
-    this.arrowMyTurn.height = arrowHeight;
+    arrowMyTurn.x = arrowX;
+    arrowMyTurn.y = board.y + (board.height * 3) / 5;
+    arrowMyTurn.width = arrowWidth;
+    arrowMyTurn.height = arrowHeight;
     
-    this.arrowOppTurn.x = arrowX;
-    this.arrowOppTurn.y = this.board.y + this.board.height / 5;
-    this.arrowOppTurn.width = arrowWidth;
-    this.arrowOppTurn.height = arrowHeight;
+    arrowOppTurn.x = arrowX;
+    arrowOppTurn.y = board.y + board.height / 5;
+    arrowOppTurn.width = arrowWidth;
+    arrowOppTurn.height = arrowHeight;
     
-    this.zeroPointMe = new Area();
-    this.zeroPointOpp = new Area();
+    zeroPointMe = new Area();
+    zeroPointOpp = new Area();
     
-    double zeroPointX = isHomeBoardLeft ? x : this.board.x + this.board.width + 1;
-    this.zeroPointCheckerHeight = this.checkerRadius / 2;
+    double zeroPointX = isHomeBoardLeft ? x : board.x + board.width + 1;
+    zeroPointCheckerHeight = checkerRadius / 2;
     
-    this.zeroPointOpp.y = this.board.y;
-    this.zeroPointOpp.x = zeroPointX;
-    this.zeroPointOpp.width = this.pointWidth;
-    this.zeroPointOpp.height = this.pointHeight;
+    zeroPointOpp.y = board.y;
+    zeroPointOpp.x = zeroPointX;
+    zeroPointOpp.width = pointWidth;
+    zeroPointOpp.height = pointHeight;
     
-    this.zeroPointMe.y = this.board.y + this.board.height - this.checkerRadius * 2;
-    this.zeroPointMe.x = zeroPointX;
-    this.zeroPointMe.width = this.pointWidth;
-    this.zeroPointMe.height = this.pointHeight;
+    zeroPointMe.y = board.y + board.height - checkerRadius * 2;
+    zeroPointMe.x = zeroPointX;
+    zeroPointMe.width = pointWidth;
+    zeroPointMe.height = pointHeight;
     
-    double barCheckerX = this.bar.x + 1;
+    double barCheckerX = bar.x + 1;
     
-    this.barMe = new Area();
-    this.barOpp = new Area();
+    barMe = new Area();
+    barOpp = new Area();
     
-    this.barMe.x = barCheckerX;
-    this.barMe.y = this.board.y + this.board.height - this.checkerRadius * 10;
-    this.barMe.width = this.bar.width - 2;
-    this.barMe.height = this.pointHeight;
+    barMe.x = barCheckerX;
+    barMe.y = board.y + board.height - checkerRadius * 10;
+    barMe.width = bar.width - 2;
+    barMe.height = pointHeight;
     
-    this.barOpp.x = barCheckerX;
-    this.barOpp.y = this.board.y + this.checkerRadius * 8;
-    this.barOpp.width = this.bar.width - 2;
-    this.barOpp.height = this.pointHeight;
+    barOpp.x = barCheckerX;
+    barOpp.y = board.y + checkerRadius * 8;
+    barOpp.width = bar.width - 2;
+    barOpp.height = pointHeight;
     
-    this.diceMe = new Area();
-    this.diceOpp = new Area();
-    double diceY = this.board.y + this.pointHeight;
-    double diceWidth = 6 * this.pointWidth;
-    double diceHeight = this.board.height - 2 * this.pointHeight;
+    diceMe = new Area();
+    diceOpp = new Area();
+    double diceY = board.y + pointHeight;
+    double diceWidth = 6 * pointWidth;
+    double diceHeight = board.height - 2 * pointHeight;
     
     // Dice and cube don't care about isHomeBoardLeft ..
-    this.diceMe.x = this.bar.x + this.bar.width;
-    this.diceOpp.x = this.board.x;  
-    this.diceMe.y = diceY;
-    this.diceMe.width = diceWidth;
-    this.diceMe.height = diceHeight;
-    this.diceOpp.y = diceY;
-    this.diceOpp.width = diceWidth;
-    this.diceOpp.height = diceHeight; 
+    diceMe.x = bar.x + bar.width;
+    diceOpp.x = board.x;  
+    diceMe.y = diceY;
+    diceMe.width = diceWidth;
+    diceMe.height = diceHeight;
+    diceOpp.y = diceY;
+    diceOpp.width = diceWidth;
+    diceOpp.height = diceHeight; 
     // what about first and second die?  
     
-    this.cubeMe = new Area();
-    this.cubeOpp = new Area();
-    this.cubeMiddle = new Area(); 
-    this.cubeOfferedByMe = new Area();
-    this.cubeOfferedByOpp = new Area();
+    cubeMe = new Area();
+    cubeOpp = new Area();
+    cubeMiddle = new Area(); 
+    cubeOfferedByMe = new Area();
+    cubeOfferedByOpp = new Area();
   
-    double cubeHeight = this.cubeMarginWidth; 
-    double cubeX = isHomeBoardLeft ? this.board.x + this.board.width + 1: this.x + 1; 
-    this.cubeMe.width = cubeHeight;
-    this.cubeMe.height = cubeHeight;
-    this.cubeMe.x = cubeX;
-    this.cubeMe.y = this.board.y + this.board.height - cubeHeight;
+    double cubeHeight = cubeMarginWidth; 
+    double cubeX = isHomeBoardLeft ? board.x + board.width + 1: x + 1; 
+    cubeMe.width = cubeHeight;
+    cubeMe.height = cubeHeight;
+    cubeMe.x = cubeX;
+    cubeMe.y = board.y + board.height - cubeHeight;
     
-    this.cubeOpp.width = cubeHeight;
-    this.cubeOpp.height = cubeHeight;
-    this.cubeOpp.x = cubeX;
-    this.cubeOpp.y = this.board.y;
+    cubeOpp.width = cubeHeight;
+    cubeOpp.height = cubeHeight;
+    cubeOpp.x = cubeX;
+    cubeOpp.y = board.y;
     
-    this.cubeMiddle.width = cubeHeight;
-    this.cubeMiddle.height = cubeHeight;
-    this.cubeMiddle.x = cubeX;
-    this.cubeMiddle.y = this.board.y + this.pointHeight;
+    cubeMiddle.width = cubeHeight;
+    cubeMiddle.height = cubeHeight;
+    cubeMiddle.x = cubeX;
+    cubeMiddle.y = board.y + pointHeight;
     
-    this.cubeOfferedByMe.width = cubeHeight;
-    this.cubeOfferedByMe.height = cubeHeight;
-    this.cubeOfferedByMe.x = this.bar.x + this.bar.width + 2 * this.pointWidth;
-    this.cubeOfferedByMe.y = this.board.y + this.pointHeight;
+    cubeOfferedByMe.width = cubeHeight;
+    cubeOfferedByMe.height = cubeHeight;
+    cubeOfferedByMe.x = bar.x + bar.width + 2 * pointWidth;
+    cubeOfferedByMe.y = board.y + pointHeight;
     
-    this.cubeOfferedByOpp.width = cubeHeight;
-    this.cubeOfferedByOpp.height = cubeHeight;
-    this.cubeOfferedByOpp.x = this.board.x + 2 * this.pointWidth;
-    this.cubeOfferedByOpp.y = this.board.y + this.pointHeight;
+    cubeOfferedByOpp.width = cubeHeight;
+    cubeOfferedByOpp.height = cubeHeight;
+    cubeOfferedByOpp.x = board.x + 2 * pointWidth;
+    cubeOfferedByOpp.y = board.y + pointHeight;
+    
+    undo = new Area();
+    undo.width = arrowWidth; // TODO: give own field?
+    undo.height = arrowHeight;
+    undo.x = arrowX;
+    undo.y = board.y;
   }
 
 
@@ -339,6 +347,14 @@ class BoardMap {
           return true;
       }
       return false;
+  }
+  
+  bool locateUndo(Item item, double x, double y){
+    if (this.undo.contains(x, y)) {
+      item.area = AREA_UNDO;
+      return true;
+    }
+    return false;
   }
 
   // Returns the outer-rectangle starting at the topleftcorner of the checker; includes the checker + its insets
@@ -480,28 +496,32 @@ class BoardMap {
   Item locateItem(double x, double y){
       Item item = new Item();
       
-      if (this.locateChecker(item, x, y)) {
+      if (locateChecker(item, x, y)) {
           return item;
       }
       
-      if (this.locateCube(item, x, y)) {
+      if (locateCube(item, x, y)) {
           return item;
       }
       
-      if (this.locateDice(item, x, y)) {
+      if (locateDice(item, x, y)) {
           return item;
       }
       
-      if (this.locateBearOff(item, x, y)) {
+      if (locateBearOff(item, x, y)) {
           return item;
       }
       
-      if (this.locateBar(item, x, y)) {
+      if (locateBar(item, x, y)) {
           return item;
       }
       
-      if (this.locateTurn(item, x, y)) {
+      if (locateTurn(item, x, y)) {
           return item;
+      }
+      
+      if (locateUndo(item, x, y)) {
+        return item;
       }
       return item;
   }

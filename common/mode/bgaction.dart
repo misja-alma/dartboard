@@ -7,6 +7,8 @@ import '../board.dart';
 
 abstract class BGAction {
   execute(Board board);
+  
+  undo(Board board); // TODO implement everywhere
 }
 
 class SwitchTurnAction extends BGAction {
@@ -18,14 +20,23 @@ class SwitchTurnAction extends BGAction {
     position.switchTurn();
     board.switchTurn();
   }
+  
+  undo(Board board) {
+    position.switchTurn();
+    board.switchTurn();
+  }
 }
 
 class NoAction extends BGAction {
   execute(Board board) {}
+  
+  undo(Board board) {}
 }
 
 class IllegalAction extends BGAction {
   execute(Board board) {}
+  
+  undo(Board board) {}
 }
 
 class CheckerPlayedAction extends BGAction {
@@ -40,6 +51,10 @@ class CheckerPlayedAction extends BGAction {
   execute(Board board) {
     position.playChecker(player, pointFrom, pointTo);
     board.checkerPlayed(player, pointFrom, pointTo); 
+  }
+  
+  undo(Board board) {
+    // TODO play reverse move
   }
 }
 
@@ -57,6 +72,10 @@ class RollFinishedAction extends BGAction {
     position.die1 == DIE_NONE;
     position.die2 == DIE_NONE; 
   }
+  
+  undo(Board board) {
+    // TODO
+  }
 }
 
 class RolledAction extends BGAction {
@@ -73,6 +92,10 @@ class RolledAction extends BGAction {
     position.die2 = die2;
     gameState.playerRolled();
     board.rolled(die1, die2); 
+  }
+  
+  undo(Board board) {
+    // TODO
   }
 }
 

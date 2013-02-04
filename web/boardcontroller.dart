@@ -37,7 +37,8 @@ String boardElementName;
 CanvasElement board;
 PositionRecord currentPosition;
 BoardMode currentBoardmode;
-  
+List<BGAction> lastActions;
+
   initBoard(String boardName) {
     currentBoardmode = getBoardmode(EDIT_MODE);
     bgBoard = new BgBoard();
@@ -151,8 +152,15 @@ BoardMode currentBoardmode;
   
   void handleClick(num x, num y){
     Item item = boardMap.locateItem(x, y);
-    List<BGAction> actions = currentBoardmode.interpretMouseClick(currentPosition, item);
-    actions.forEach((action) => action.execute(this));
+    if(item.area == AREA_UNDO) {
+      if(lastActions != null) {
+        lastActions.forEach((action) => action.undo(this));
+      }
+    } else {
+      List<BGAction> actions = currentBoardmode.interpretMouseClick(currentPosition, item);
+      actions.forEach((action) => action.execute(this));
+      lastActions = actions;
+    }
   }
   
   void boardClicked(MouseEvent event){

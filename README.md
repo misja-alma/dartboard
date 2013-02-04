@@ -5,6 +5,7 @@ Refactoring:
   
 Improvements:  
 - for counterclockwise board, the arrow and cube should stay on the righthand side of the board
+  TODO also, make new area left of board, where the undo area should be located. Maybe later also other stuff like surrender etc.
 - add method to generate xgId. Then, fill the id when the gnu/xg idType radiobutton changes.
 - figure out how to run the testsuite in the browser. Maybe get rid of colortestrunner (and testsuite?) this way.
   Problem: only one main function will be called, so only one testcase can be included.
