@@ -45,14 +45,15 @@ List<BGAction> lastActions;
     isHomeBoardLeft = true;
     boardElementName = boardName;
     board = query("#${boardName}");
-    board.on.click.add(boardClicked);
+    board.onClick.listen((event) => boardClicked(event));
   }
   
   void setBoardDimensions() {
     CanvasElement board = query("#bgboard");
     // HtmlCanvas ignores the css width and height but takes the html attributes instead.
     // So we have so set them ourselves, using the following callback.
-    board.computedStyle.then((style) => setDimensionsFromStyle(board, style));
+    CssStyleDeclaration style = board.getComputedStyle();
+    setDimensionsFromStyle(board, style);
   }
   
   void setDimensionsFromStyle(CanvasElement board, CssStyleDeclaration style) {
@@ -63,10 +64,10 @@ List<BGAction> lastActions;
   
   void initListeners() {
     Element positionId = query("#positionId");  
-    positionId.on.blur.add((e) => drawFromPositionId());
-    positionId.on.keyPress.add((e) => keyPressedInPositionId(e));
+    positionId.onBlur.listen((e) => drawFromPositionId());
+    positionId.onKeyPress.listen((e) => keyPressedInPositionId(e));
     Element direction = query("#direction");
-    direction.on.click.add((e) => drawFromPositionId());
+    direction.onClick.listen((e) => drawFromPositionId());
   }
   
   void drawFromPositionId(){
@@ -109,7 +110,7 @@ List<BGAction> lastActions;
   
   String getSelectedIdType() {
     List<InputElement> ids = queryAll("[name=idType]"); // TODO normal selector by name doesnt work?
-    InputElement selectedType = ids.filter((e) => e.checked).iterator().next(); // TODO is there no find?
+    InputElement selectedType = ids.where((e) => e.checked).first; // TODO is there no find? Check if this works!
     return selectedType.value;
   }
   

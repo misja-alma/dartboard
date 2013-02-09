@@ -37,7 +37,7 @@ class Area {
   double width;
   double height;
     
-  bool contains(double x, double y){
+  bool contains(num x, num y){
     if (x >= this.x && x < this.x + this.width) {
         if (y >= this.y && y < this.y + this.height) {
             return true;
@@ -111,7 +111,7 @@ class BoardMap {
     if (isHomeBoardLeft) {
       board.x = x + bearOffMarginWidth;
     } else {
-      board.x = x + cubeMarginWidth;
+      board.x = x; // + cubeMarginWidth;
     }
     board.y = y + pointNumberHeight;
     board.width = width - bearOffMarginWidth - cubeMarginWidth;
@@ -132,7 +132,7 @@ class BoardMap {
     
     double arrowWidth = cubeMarginWidth - 2;
     double arrowHeight = board.height / 5;
-    double arrowX = isHomeBoardLeft ? board.x + board.width + 1 : x + 1;
+    double arrowX = board.x + board.width + 1; //isHomeBoardLeft ? board.x + board.width + 1 : x + 1;
     
     arrowMyTurn.x = arrowX;
     arrowMyTurn.y = board.y + (board.height * 3) / 5;
@@ -234,7 +234,7 @@ class BoardMap {
 
 
   // Locates the checker from player 'me'-'s perspective
-  bool locateChecker(Item item, double x, double y){
+  bool locateChecker(Item item, num x, num y){
       for (int index = 1; index <= 24; index++) {
           Area point = this.getPointArea(index, false);
           if (point.contains(x, y)) {
@@ -253,7 +253,7 @@ class BoardMap {
       return false;
   }
 
-  bool locateCube(Item item, double x, double y){
+  bool locateCube(Item item, num x, num y){
     if(this.cubeMe.contains(x, y)) {
       item.area = AREA_CUBE;
       item.side = 0;
@@ -286,7 +286,7 @@ class BoardMap {
     return false;
   }
 
-  bool locateDice(Item item, double x, double y){
+  bool locateDice(Item item, num x, num y){
       if (this.diceMe.contains(x, y)) {
           item.area = AREA_DICE;
           item.side = 0;
@@ -300,7 +300,7 @@ class BoardMap {
       return false;
   }
 
-  bool locateBearOff(Item item, double x, double y){
+  bool locateBearOff(Item item, num x, num y){
       if (this.zeroPointMe.contains(x, y)) {
           item.area = AREA_BEAROFF;
           item.side = 0;
@@ -317,7 +317,7 @@ class BoardMap {
       return false;
   }
 
-  bool locateBar(Item item, double x, double y){
+  bool locateBar(Item item, num x, num y){
       // Counting of the height starts from the middle of the bar
       if (this.barMe.contains(x, y)) {
           item.area = AREA_BAR;
@@ -335,7 +335,7 @@ class BoardMap {
       return false;
   }
 
-  bool locateTurn(Item item, double x, double y){
+  bool locateTurn(Item item, num x, num y){
       if (this.arrowMyTurn.contains(x, y)) {
           item.area = AREA_TURN;
           item.side = 0;
@@ -349,7 +349,7 @@ class BoardMap {
       return false;
   }
   
-  bool locateUndo(Item item, double x, double y){
+  bool locateUndo(Item item, num x, num y){
     if (this.undo.contains(x, y)) {
       item.area = AREA_UNDO;
       return true;
@@ -493,7 +493,7 @@ class BoardMap {
       return barWidth;
   }
 
-  Item locateItem(double x, double y){
+  Item locateItem(num x, num y){
       Item item = new Item();
       
       if (locateChecker(item, x, y)) {

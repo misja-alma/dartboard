@@ -3,6 +3,13 @@ library canvasutils;
 import '../common/boardmap.dart';
 import 'dart:html';
 
+class Point {
+  int x;
+  int y;
+  
+  Point(this.x, this.y);
+}
+
 void fillRoundedRect(CanvasRenderingContext2D context, Area area, num cornerRadius, String color){
   context.beginPath();
   context.moveTo(area.x + cornerRadius, area.y);

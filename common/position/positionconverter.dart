@@ -193,8 +193,8 @@ part of position;
       position.cubeOffered = true;
     } // No option yet for double/ beaver/ raccoon (B, R)
     else {
-      position.die1 = parseInt(rawDice[0]);
-      position.die2 = parseInt(rawDice[1]); 
+      position.die1 = int.parse(rawDice[0]);
+      position.die2 = int.parse(rawDice[1]); 
       position.decisionTurn = position.playerOnRoll;    
     }
     
@@ -202,13 +202,13 @@ part of position;
     nextAttributePos = xgId.indexOf(":", charPos);
     
     String rawScore = xgId.substring(charPos, nextAttributePos);
-    position.matchScore[0] = parseInt(rawScore);
+    position.matchScore[0] = int.parse(rawScore);
       
     charPos = nextAttributePos + 1;
     nextAttributePos = xgId.indexOf(":", charPos);
     
     rawScore = xgId.substring(charPos, nextAttributePos);
-    position.matchScore[1] = parseInt(rawScore);
+    position.matchScore[1] = int.parse(rawScore);
       
     charPos = nextAttributePos + 1;
     nextAttributePos = xgId.indexOf(":", charPos);
@@ -220,7 +220,7 @@ part of position;
     charPos = nextAttributePos + 1;
     nextAttributePos = xgId.indexOf(":", charPos);
     
-    position.matchLength = parseInt(xgId.substring(charPos, nextAttributePos));
+    position.matchLength = int.parse(xgId.substring(charPos, nextAttributePos));
     if(position.matchLength == 0) {
       position.crawford = false;
     }
