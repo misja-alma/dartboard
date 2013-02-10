@@ -1,9 +1,7 @@
 import '../common/boardmap.dart';
 import 'package:unittest/unittest.dart';
-import 'package:unittest/html_enhanced_config.dart';
 
 main() {
-  useHtmlEnhancedConfiguration();
   
     group("Clockwise board", () {
       BoardMap boardMap;
@@ -171,13 +169,6 @@ main() {
         expect(rec.y, lessThan(100));
       });
       
-      test("should calculate coordinates of own checker on 0 point (born off) to be int the very right bottom corner", (){
-        Area rec = boardMap.getCheckerRectangle(0, 1, false);
-        
-        expect(rec.x, greaterThan(150));
-        expect(rec.y, greaterThan(150));
-      });
-      
       test("should calculate coordinates of opponent's checker on 1 point to be somewhere in right top corner", (){
         Area rec = boardMap.getCheckerRectangle(1, 1, true);
         
@@ -204,14 +195,6 @@ main() {
         
         expect(rec.x, greaterThan(100));
         expect(rec.y, greaterThan(100));
-      });
-      
-      test("should calculate coordinates of opponent's checker on 0 point (born off) to be int the very right top corner", (){
-        Area rec = boardMap.getCheckerRectangle(0, 1, true);
-        
-        expect(rec.x, greaterThan(150));
-        expect(rec.y, lessThan(100));
-      });
-      
+      });      
     });
 }

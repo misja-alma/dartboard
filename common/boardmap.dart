@@ -74,6 +74,7 @@ class BoardMap {
   bool isHomeBoardLeft;
   double pointNumberHeight;
   double bearOffMarginWidth;
+  double controlsWidth;
   double cubeMarginWidth;
   Area board;
   Area bar;
@@ -104,17 +105,15 @@ class BoardMap {
     
     this.isHomeBoardLeft = isHomeBoardLeft;
     pointNumberHeight = height / 14;
-    bearOffMarginWidth = width / 14;
+    bearOffMarginWidth = width / 15;
+    controlsWidth = width / 15; 
     cubeMarginWidth = width / 8;
     
     board = new Area();
-    if (isHomeBoardLeft) {
-      board.x = x + bearOffMarginWidth;
-    } else {
-      board.x = x; // + cubeMarginWidth;
-    }
+    board.x = x + bearOffMarginWidth + controlsWidth;
+    
     board.y = y + pointNumberHeight;
-    board.width = width - bearOffMarginWidth - cubeMarginWidth;
+    board.width = width - bearOffMarginWidth - cubeMarginWidth - controlsWidth;
     board.height = height - 2 * pointNumberHeight;
     
     bar = new Area();
@@ -132,7 +131,7 @@ class BoardMap {
     
     double arrowWidth = cubeMarginWidth - 2;
     double arrowHeight = board.height / 5;
-    double arrowX = board.x + board.width + 1; //isHomeBoardLeft ? board.x + board.width + 1 : x + 1;
+    double arrowX = board.x + board.width + 1; 
     
     arrowMyTurn.x = arrowX;
     arrowMyTurn.y = board.y + (board.height * 3) / 5;
@@ -147,7 +146,7 @@ class BoardMap {
     zeroPointMe = new Area();
     zeroPointOpp = new Area();
     
-    double zeroPointX = isHomeBoardLeft ? x : board.x + board.width + 1;
+    double zeroPointX = x + controlsWidth;
     zeroPointCheckerHeight = checkerRadius / 2;
     
     zeroPointOpp.y = board.y;
@@ -199,7 +198,7 @@ class BoardMap {
     cubeOfferedByOpp = new Area();
   
     double cubeHeight = cubeMarginWidth; 
-    double cubeX = isHomeBoardLeft ? board.x + board.width + 1: x + 1; 
+    double cubeX = board.x + board.width + 1;  
     cubeMe.width = cubeHeight;
     cubeMe.height = cubeHeight;
     cubeMe.x = cubeX;
@@ -226,9 +225,9 @@ class BoardMap {
     cubeOfferedByOpp.y = board.y + pointHeight;
     
     undo = new Area();
-    undo.width = arrowWidth; // TODO: give own field?
-    undo.height = arrowHeight;
-    undo.x = arrowX;
+    undo.width = controlsWidth; 
+    undo.height = board.height / 5;
+    undo.x = x;
     undo.y = board.y;
   }
 

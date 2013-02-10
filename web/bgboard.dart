@@ -331,9 +331,9 @@ class BgBoard {
     // draw curved part of arrow; 
     context.beginPath();
     context.moveTo(x + width / 12, y + height * 5 / 12);
-    context.quadraticCurveTo(x + width, y, x + width * 2 / 5, y + height);
+    context.quadraticCurveTo(x + width * 1.5, y, x + width * 2 / 5, y + height);
     
-    context.quadraticCurveTo(x + width * 4 / 5, y + height / 5, x + width / 4, y + height * 7 / 12);
+    context.quadraticCurveTo(x + width, y + height / 5, x + width / 4, y + height * 7 / 12);
     context.moveTo(x + width / 12, y + height * 5 / 12);
     context.closePath();
    
