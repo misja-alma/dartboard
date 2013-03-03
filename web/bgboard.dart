@@ -33,7 +33,7 @@ class BgBoard {
   // myCheckers and oppCheckers contain the nr's of checkers for each player on each point on the board. Points are numbered from the player's own orientation
   void drawPosition(CanvasRenderingContext2D context, PositionRecord position, BoardMap boardMap){  
     if(!pointPattern.complete) {
-      pointPattern.on.load.add((e) => doDrawPosition(context, position, boardMap));  
+      pointPattern.onLoad.listen((e) => doDrawPosition(context, position, boardMap));  
     } else {
       doDrawPosition(context, position, boardMap);
     }

@@ -1,4 +1,5 @@
 import '../../common/position.dart';
+import '../../common/checkerplay.dart';
 import 'package:unittest/unittest.dart';
 
 main() { 
@@ -37,21 +38,21 @@ main() {
    expect(positionRecord.checkers[0][0], isNot(clonedPosition.checkers[0][0]));
  });
  
- test('Test that playchecker adjusts position correctly', () {
+ test('Test that playhalfmove adjusts position correctly', () {
    var positionRecord = new PositionRecord.initialPosition();
    
-   positionRecord.playChecker(0, 13, 11);
+   positionRecord.playHalfMove(new HalfMove(13, 11, false, 0));
    
    expect(positionRecord.getNrCheckersOnPoint(0, 13), equals(4));
    expect(positionRecord.getNrCheckersOnPoint(0, 11), equals(1));
  });
  
- test('Test that playchecker, when it hits, adjusts position correctly', () {
+ test('Test that playhalfmove, when it hits, adjusts position correctly', () {
    var positionRecord = new PositionRecord.initialPosition();
    positionRecord.setNrCheckersOnPoint(0, 22, 1);
    positionRecord.setNrCheckersOnPoint(0, 24, 1);
    
-   positionRecord.playChecker(1, 6, 3);
+   positionRecord.playHalfMove(new HalfMove(6, 3, true, 1));
    
    expect(positionRecord.getNrCheckersOnPoint(1, 6), equals(4));
    expect(positionRecord.getNrCheckersOnPoint(1, 3), equals(1));

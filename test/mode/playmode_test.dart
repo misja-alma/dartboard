@@ -5,6 +5,7 @@ import '../../common/boardmap.dart';
 import '../../common/mode/bgaction.dart';
 import '../../common/checkerplay.dart';
 import '../../common/board.dart';
+import '../../common/gamestate.dart';
 import '../testutils.dart';
 //import 'package:unittest/html_enhanced_config.dart';
 import 'package:unittest/unittest.dart';
@@ -31,8 +32,8 @@ main() {
       position.die2 = 5;
       moveValidator = new MockMovevalidator();
       moveValidator.when(callsTo('isDieBlocked', anything, anything, anything)).alwaysReturn(false);
-      playmode = new PlayMode.createWithValidator(moveValidator);
-      playmode.initializeState(position);
+      GameState gameState = new GameState.fromPosition(position);
+      playmode = new PlayMode.createWithValidator(moveValidator, gameState);
     });
     
     test('Test that picking a checker results in a checkerPlayedAction with highest die', () {
@@ -77,8 +78,8 @@ main() {
       position.die2 = 5;
       moveValidator = new MockMovevalidator();
       moveValidator.when(callsTo('isDieBlocked', anything, anything, anything)).alwaysReturn(false);
-      playmode = new PlayMode.createWithValidator(moveValidator);
-      playmode.initializeState(position);
+      GameState gameState = new GameState.fromPosition(position);
+      playmode = new PlayMode.createWithValidator(moveValidator, gameState);
     });
     
     test('Test that picking a checker from the bar results in a checkerPlayedAction with the only possible die', () {
@@ -120,8 +121,8 @@ main() {
       moveValidator = new MockMovevalidator();
       moveValidator.when(callsTo('isDieBlocked', 0, 6, anything)).alwaysReturn(true);
       moveValidator.when(callsTo('isValidMove', anything, anything)).alwaysReturn(true);
-      playmode = new PlayMode.createWithValidator(moveValidator);
-      playmode.initializeState(position);
+      GameState gameState = new GameState.fromPosition(position);
+      playmode = new PlayMode.createWithValidator(moveValidator, gameState);
     });
     
     test('Test that clicking on the bar results in a RollFinishedAction', () {

@@ -45,16 +45,31 @@ class CheckerPlayedAction extends BGAction {
   int playedDie;
   int player;
   PositionRecord position;
+  GameState gameState;
   
-  CheckerPlayedAction({this.position, this.pointFrom, this.pointTo, this.playedDie, this.player});
+  CheckerPlayedAction({this.position, this.pointFrom, this.pointTo, this.playedDie, this.player, this.gameState});
   
   execute(Board board) {
-    position.playChecker(player, pointFrom, pointTo);
+    HalfMove halfMove = new HalfMove(pointFrom, pointTo, isHit(player, pointTo, position), player);
+    position.playHalfMove(halfMove);
     board.checkerPlayed(player, pointFrom, pointTo); 
+    gameState.diceLeftToPlay.remove(playedDie);
+    gameState.halfMovesPlayed.add(halfMove);
   }
   
   undo(Board board) {
-    // TODO play reverse move
+    HalfMove halfMove = new HalfMove(pointFrom, pointTo, isHit(player, pointTo, position), player);
+    position.undoHalfMove(halfMove);
+    gameState.diceLeftToPlay.add(playedDie);
+    gameState.halfMovesPlayed.removeLast();
+    board.draw(position);
+  }
+  
+  bool isHit(int player, int point, PositionRecord position) {
+    if(point == 0) {
+      return false;
+    }
+    return (position.getNrCheckersOnPoint(invertPlayer(player), 25 - point) == 1);
   }
 }
 
@@ -63,18 +78,35 @@ class RollFinishedAction extends BGAction {
   PositionRecord position;
   GameState gameState;
   
+  int savedDie1;
+  int savedDie2;
+  List<int> savedDiceLeft;
+  List<HalfMove> savedHalfMoves;
+  
   RollFinishedAction(this.position, this.gameState, this.player);
   
   execute(Board board) {
     gameState.rollFinished();
     position.playerOnRoll = invertPlayer(position.playerOnRoll);
     position.decisionTurn = invertDecisionTurn(position.decisionTurn);
+    savedDie1 = position.die1;
+    savedDie2 = position.die2;
+    savedDiceLeft = gameState.diceLeftToPlay;
+    savedHalfMoves = gameState.halfMovesPlayed;
     position.die1 == DIE_NONE;
     position.die2 == DIE_NONE; 
+    gameState.diceLeftToPlay = [];
+    gameState.halfMovesPlayed = [];
   }
   
   undo(Board board) {
-    // TODO
+    gameState.currentState = STATE_ROLLED;
+    position.playerOnRoll = invertPlayer(position.playerOnRoll);
+    position.decisionTurn = invertDecisionTurn(position.decisionTurn);
+    gameState.diceLeftToPlay = savedDiceLeft;
+    gameState.halfMovesPlayed = savedHalfMoves;
+    position.die1 = savedDie1;
+    position.die2 = savedDie2;
   }
 }
 
@@ -90,12 +122,12 @@ class RolledAction extends BGAction {
   execute(Board board) {
     position.die1 = die1;
     position.die2 = die2;
-    gameState.playerRolled();
+    gameState.playerRolled(die1, die2);
     board.rolled(die1, die2); 
   }
   
   undo(Board board) {
-    // TODO
+    // No Undo possible (for now)
   }
 }
 

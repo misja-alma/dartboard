@@ -7,6 +7,7 @@ const String AREA_DICE = "DICE";
 const String AREA_CUBE = "CUBE";
 const String AREA_BEAROFF = "BEAROFF";
 const String AREA_UNDO = "UNDO";
+const String AREA_NEWGAME = "NEW GAME";
 
 const String CUBELOCATION_OWNED = "CUBE_OWNED";
 const String CUBELOCATION_MIDDLE = "CUBE_MIDDLE";

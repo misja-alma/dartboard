@@ -14,14 +14,11 @@ class PlayMode extends BoardMode {
   MoveValidator moveValidator = new MoveValidator();
   Dice dice = new Dice();
   
-  List<int> diceLeftToPlay = [];
-  List<HalfMove> halfMovesPlayed = [];
+  GameState gameState;
   
-  GameState gameState = new GameState.newGame();
+  PlayMode(GameState gameState) : this.createWithValidator(new MoveValidator(), gameState);
   
-  PlayMode() : this.createWithValidator(new MoveValidator());
-  
-  PlayMode.createWithValidator(MoveValidator moveValidator) {
+  PlayMode.createWithValidator(MoveValidator moveValidator, this.gameState) {
     this.moveValidator = moveValidator;
   }
   
@@ -34,11 +31,9 @@ class PlayMode extends BoardMode {
     }    
     if(gameState.isCheckerPlayPossible()) {
       if(isRollBlocked(position)) {
-        if(!moveValidator.isValidMove(halfMovesPlayed, position)) {
+        if(!moveValidator.isValidMove(gameState.halfMovesPlayed, position)) {
           return [new IllegalAction()];
         }
-        diceLeftToPlay = [];
-        halfMovesPlayed = [];
         return [fullRollPlayed(position)]; 
       }
       if(clickedItem.area == AREA_CHECKER || clickedItem.area == AREA_BAR) {
@@ -50,7 +45,7 @@ class PlayMode extends BoardMode {
   
   bool isRollBlocked(PositionRecord position) {
     int player = position.playerOnRoll;
-    Set<int> distinctDiceLeft = new Set.from(diceLeftToPlay);
+    Set<int> distinctDiceLeft = new Set.from(gameState.diceLeftToPlay);
     for(int die in distinctDiceLeft) {
       if(!moveValidator.isDieBlocked(player, die, position)) {
         return false;
@@ -69,15 +64,8 @@ class PlayMode extends BoardMode {
     return false;
   }
   
-  initializeState(PositionRecord position) {
-    diceLeftToPlay = getDiceAsList(position.die1, position.die2);
-    gameState = new GameState.fromPosition(position);
-    halfMovesPlayed = [];  
-  }
-  
   List<BGAction> roll(PositionRecord position) {
     List<int> newDice = dice.roll();
-    diceLeftToPlay = expandDoubles(newDice);
     return [new RolledAction(position, gameState, newDice[0], newDice[1], position.playerOnRoll)];
   }
   
@@ -99,11 +87,10 @@ class PlayMode extends BoardMode {
   
   List<BGAction> findValidCheckerMove(int startingPoint, PositionRecord position) {
     int player = position.playerOnRoll;
-    for(int index=0; index<diceLeftToPlay.length; index++) {
-      int die = diceLeftToPlay[index];
+    for(int index=0; index<gameState.diceLeftToPlay.length; index++) {
+      int die = gameState.diceLeftToPlay[index];
       int pointTo = moveValidator.getLandingPoint(player, die, startingPoint, position); 
       if(pointTo != INVALID_MOVE) {
-        diceLeftToPlay.removeAt(index);
         return playCheckerMove(startingPoint, pointTo, die, player, position);  
       }
     }
@@ -112,19 +99,11 @@ class PlayMode extends BoardMode {
   
   List<BGAction> playCheckerMove(int startingPoint, int pointTo, int die, int player, PositionRecord position) {
     List<BGAction> result = [];
-    result.add(new CheckerPlayedAction(position: position, pointFrom: startingPoint, pointTo: pointTo, playedDie: die, player: player));
-    halfMovesPlayed.add(new HalfMove(startingPoint, pointTo, isHit(player, pointTo, position)));
-    if(diceLeftToPlay.isEmpty) {
+    result.add(new CheckerPlayedAction(position: position, pointFrom: startingPoint, pointTo: pointTo, playedDie: die, player: player, gameState: gameState));
+    if(gameState.diceLeftToPlay.length == 1) {
       result.add(fullRollPlayed(position));
     }
     return result;
-  }
-  
-  bool isHit(int player, int point, PositionRecord position) {
-    if(point == 0) {
-      return false;
-    }
-    return (position.getNrCheckersOnPoint(invertPlayer(player), 25 - point) == 1);
   }
   
   BGAction fullRollPlayed(PositionRecord position) {

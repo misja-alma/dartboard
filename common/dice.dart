@@ -13,16 +13,24 @@ class Dice {
     return result;
   }
   
+  List<int> rollOpening() {
+    int die1 = rollDie();
+    int die2 = rollDieNot(die1);
+    List<int> result = [die1, die2];
+    return result;
+  }
+  
   int rollDie() {
     return random.nextInt(6) + 1;
   }
-}
-
-List<int> expandDoubles(List<int> dicel) {
-  if(dicel[0] == dicel[1]) {
-    return [dicel[0], dicel[1], dicel[0], dicel[1]];
+  
+  int rollDieNot(int die) {
+    int semiDie = random.nextInt(5) + 1;
+    if(semiDie >= die) {
+      semiDie++;
+    }
+    return semiDie;
   }
-  return new List.from(dicel);
 }
 
 List<int> getDiceAsList(int die1, int die2) {

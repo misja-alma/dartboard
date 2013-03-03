@@ -2,6 +2,7 @@ library position;
 
 import 'dart:math';
 import 'listutils.dart';
+import 'checkerplay.dart';
 
 part 'position/base64utils.dart';
 part 'position/parseutils.dart';
@@ -118,13 +119,29 @@ class PositionRecord {
     checkers[player][point]= nr;
   }
   
-  void playChecker(int player, int from, int to) {
+  void playHalfMove(HalfMove halfMove) {
+    int player = halfMove.player;
+    int from = halfMove.from;
+    int to = halfMove.to;
     checkers[player][from] -= 1;
     checkers[player][to] += 1;
     int opponent = player == 1? 0: 1;
     if(checkers[opponent][25 - to] == 1) {
       checkers[opponent][25 - to] = 0;
       checkers[opponent][25] += 1;
+    }
+  }
+  
+  void undoHalfMove(HalfMove halfMove) {
+    int player = halfMove.player;
+    int from = halfMove.from;
+    int to = halfMove.to;
+    checkers[player][from] += 1;
+    checkers[player][to] -= 1;
+    int opponent = player == 1? 0: 1;
+    if(halfMove.hits) {
+      checkers[opponent][25 - to] += 1;
+      checkers[opponent][25] -= 1;
     }
   }
   
