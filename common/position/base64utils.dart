@@ -53,7 +53,7 @@ String makeBase64String(List<int> bitString, int length){
   // base 64 encoding
   List<int> res = [];
   for (int i = 0; i < result.length; i++) {
-    res.add(base64.charCodeAt(result[i]));
+    res.add(base64.codeUnitAt(result[i]));
   }
   return new String.fromCharCodes(res);
 }

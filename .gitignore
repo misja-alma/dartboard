@@ -3,3 +3,4 @@ pubspec.lock
 packages
 web/out
 .buildlog
+.DS_Store

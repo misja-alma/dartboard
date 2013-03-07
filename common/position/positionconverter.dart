@@ -142,16 +142,16 @@ part of position;
     xgId = xgId.trim();
     PositionRecord position = new PositionRecord();
     
-    position.checkers[1][25] = decodeXGCharcode(xgId.charCodeAt(0)).nrCheckers;
+    position.checkers[1][25] = decodeXGCharcode(xgId.codeUnitAt(0)).nrCheckers;
     
     for (int i = 1; i < 25; i++) {
-        PlayerWithCheckers checkersAtPoint = decodeXGCharcode(xgId.charCodeAt(i));
+        PlayerWithCheckers checkersAtPoint = decodeXGCharcode(xgId.codeUnitAt(i));
         if (checkersAtPoint.player != -1) {       
             int adjustedPoint = checkersAtPoint.player == 1 ? 25 - i : i;
             position.checkers[checkersAtPoint.player][adjustedPoint] = checkersAtPoint.nrCheckers;
         }
     }
-    position.checkers[0][25] = decodeXGCharcode(xgId.charCodeAt(25)).nrCheckers;
+    position.checkers[0][25] = decodeXGCharcode(xgId.codeUnitAt(25)).nrCheckers;
     
     int charPos = 27;
     

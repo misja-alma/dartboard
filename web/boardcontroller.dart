@@ -3,9 +3,11 @@ library boardcontroller;
 import '../common/position.dart';
 import '../common/board.dart';
 import '../common/boardmap.dart';
+import '../common/gamestate.dart';
 import '../common/mode/bgaction.dart';
 import '../common/mode/boardmode.dart';
 import '../common/mode/editmode.dart';
+import '../common/mode/playmode.dart';
 import '../common/listutils.dart';
 import 'canvasutils.dart';
 import 'bgboard.dart';
@@ -109,8 +111,8 @@ List<List<BGAction>> actions = [];
   }
   
   String getSelectedIdType() {
-    List<InputElement> ids = queryAll("[name=idType]"); // TODO normal selector by name doesnt work?
-    InputElement selectedType = ids.where((e) => e.checked).first; // TODO is there no find? Check if this works!
+    List<InputElement> ids = queryAll("[name=idType]"); 
+    InputElement selectedType = ids.where((e) => e.checked).first; 
     return selectedType.value;
   }
   
@@ -160,7 +162,12 @@ List<List<BGAction>> actions = [];
       }
     } else 
     if(item.area == AREA_NEWGAME) {
-      // TODO new game action
+      // TODO new game action, instead of selecting mode combo. Also make action for edit mode
+      // init pos., throw opening dice and init gamestate, set mode
+      currentPosition = new PositionRecord.initialPosition();
+      GameState gameState = new GameState.newGame();
+      //PlayMode playMode = new Playmode(gameState, currentPosition);
+      // TODO playMode.roll, which will/should trigger initial roll
     } else {
       List<BGAction> performedActions = currentBoardmode.interpretMouseClick(currentPosition, item);
       performedActions.forEach((action) => action.execute(this));

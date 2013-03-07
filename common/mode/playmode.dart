@@ -65,6 +65,7 @@ class PlayMode extends BoardMode {
   }
   
   List<BGAction> roll(PositionRecord position) {
+    // TODO check if initialposition
     List<int> newDice = dice.roll();
     return [new RolledAction(position, gameState, newDice[0], newDice[1], position.playerOnRoll)];
   }

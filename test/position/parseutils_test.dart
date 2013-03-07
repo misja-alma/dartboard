@@ -12,7 +12,7 @@ main() {
  });
  
  test('Test decodeXGCharcode', () {
-   expect(decodeXGCharcode("B".charCodeAt(0)).nrCheckers, equals(2));
-   expect(decodeXGCharcode("B".charCodeAt(0)).player, equals(0));
+   expect(decodeXGCharcode("B".codeUnitAt(0)).nrCheckers, equals(2));
+   expect(decodeXGCharcode("B".codeUnitAt(0)).player, equals(0));
  });
 }
