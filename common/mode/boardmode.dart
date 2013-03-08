@@ -23,6 +23,6 @@ BoardMode getBoardmode(String name) {
 }
 
 List<String> getAllBoardmodes() {
-  return [EDIT_MODE, PLAY_MODE];
+  return [PLAY_MODE, EDIT_MODE];
 }
 

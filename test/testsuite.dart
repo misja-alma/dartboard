@@ -1,5 +1,6 @@
 import "dart:io";
 import "dart:isolate";
+import "dart:async";
 
 /**
  * Run through the files that end with Test.dart in this directory.
@@ -8,11 +9,12 @@ import "dart:isolate";
 void main() {
   ReceivePort receivePort = new ReceivePort();
 
-  var lister = new Directory.current().list(recursive: true);
-  lister.onFile = (String path) {
-    if (path.endsWith("_test.dart")) {
-      // TODO maybe output test file here?
-      SendPort sendPort = spawnUri("file://$path");
-    }
-  };
+  Stream<FileSystemEntity> lister = new Directory.current().list(recursive: true);
+  lister.where((FileSystemEntity entity) => entity.path.endsWith("_test.dart"))
+        .every(runTest);
+}
+
+void runTest(FileSystemEntity entity) {
+  String path = entity.path; 
+  spawnUri("file://$path");
 }

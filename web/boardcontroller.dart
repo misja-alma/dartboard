@@ -30,6 +30,14 @@ List<String> getBoardmodes() {
   return getAllBoardmodes();
 }
 
+void undo(Event event) {
+  controller.undo();
+}
+
+void newGame(Event event) {
+  controller.newGame();
+}
+
 class BoardController implements Board {
   
 BgBoard bgBoard;
@@ -42,7 +50,7 @@ BoardMode currentBoardmode;
 List<List<BGAction>> actions = [];
 
   initBoard(String boardName) {
-    currentBoardmode = getBoardmode(EDIT_MODE);
+    currentBoardmode = getBoardmode(PLAY_MODE);
     bgBoard = new BgBoard();
     isHomeBoardLeft = true;
     boardElementName = boardName;
@@ -153,21 +161,29 @@ List<List<BGAction>> actions = [];
     draw(currentPosition);
   }
   
+  void undo() {
+    if(!actions.isEmpty) {
+      List<BGAction> lastActions = actions.removeLast();
+      lastActions.reversed.forEach((action) => action.undo(this));
+    }
+  }
+  
+  void newGame() {
+    // TODO new game action, instead of selecting mode combo. Also make action for edit mode
+    // init pos., throw opening dice and init gamestate, set mode
+    currentPosition = new PositionRecord.initialPosition();
+    GameState gameState = new GameState.newGame();
+    //PlayMode playMode = new Playmode(gameState, currentPosition);
+    // TODO playMode.roll, which will/should trigger initial roll
+  }
+  
   void handleClick(num x, num y){
     Item item = boardMap.locateItem(x, y);
     if(item.area == AREA_UNDO) {
-      if(!actions.isEmpty) {
-        List<BGAction> lastActions = actions.removeLast();
-        lastActions.reversed.forEach((action) => action.undo(this));
-      }
+      undo();
     } else 
     if(item.area == AREA_NEWGAME) {
-      // TODO new game action, instead of selecting mode combo. Also make action for edit mode
-      // init pos., throw opening dice and init gamestate, set mode
-      currentPosition = new PositionRecord.initialPosition();
-      GameState gameState = new GameState.newGame();
-      //PlayMode playMode = new Playmode(gameState, currentPosition);
-      // TODO playMode.roll, which will/should trigger initial roll
+      newGame();
     } else {
       List<BGAction> performedActions = currentBoardmode.interpretMouseClick(currentPosition, item);
       performedActions.forEach((action) => action.execute(this));

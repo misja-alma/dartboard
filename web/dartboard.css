@@ -8,21 +8,30 @@ body {
   margin: 15px;
 }
 
-#bgboard {
+.bgboard {
   width: 500px;
   height: 400px;
 }
 
-#positionId {
+.positionId {
   width: 300px;
 }
 
-#mode {
+.mode {
   width: 200px;
 }
 
 .inputelement {
   margin-left: 5px;
   margin-top: 5px;
+}
+
+.toolbar {
+  float: left;
+  width: 5%;
+}
+
+.toolbutton {
+  vertical-align: top;
 }
 

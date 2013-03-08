@@ -9,11 +9,16 @@
   <body>
     <h1>Dartboard</h1>
     <div>
-      <canvas id="bgboard"></canvas>
       <div>
-        <img height="60" width="60"  src="images/undo.svg"/>
+        <div class="toolbar">
+          <img on-click="undo($event)" height="60" width="60" class="toolbutton" src="images/undo.svg"/>
+          <img on-click="newGame($event)" height="60" width="60" class="toolbutton" src="images/new.svg"/>
+        </div>
+        <canvas id="bgboard" class="bgboard"></canvas>
+      </div>
+      <div>
         <span class="inputelement">Id:</span>
-        <input type="text" id="positionId" class="inputelement"/>
+        <input type="text" id="positionId" class="inputelement positionId"/>
         <span class="inputelement">type:</span>
         <input type="radio" id="typeGnu" name="idType" value="Gnu" class="inputelement" checked="true"/>
         <label for="typeGnu">Gnu</label>
@@ -27,7 +32,7 @@
       </div>
       <div>
         <span class="inputelement">Mode:</span>
-        <select id="mode" class="inputelement" on-change="modeSelected($event)" template iterate='mode in getBoardmodes()'>
+        <select id="mode" class="inputelement mode" on-change="modeSelected($event)" template iterate='mode in getBoardmodes()'>
            <option>{{mode}}</option> 
         </select>
       </div>
