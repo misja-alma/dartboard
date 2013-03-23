@@ -9,5 +9,4 @@ Improvements:
   Problem 2: cant mix io and html. 
   Only solution seems to be some command line stuff, or maybe a Eclipse plugin.
   Or: have one testsuite which imports all tests (with .. as ..) and calls their main functions.
-- Instead of the drop down with modes, add buttons 'new game' and 'edit';
-  Dont add them as part of the board, but add them as anchors with (svg) images.
+- Finish transition to newGame, undo and edit buttons. Remove undo from board.

@@ -3,13 +3,6 @@ library canvasutils;
 import '../common/boardmap.dart';
 import 'dart:html';
 
-class Point {
-  int x;
-  int y;
-  
-  Point(this.x, this.y);
-}
-
 void fillRoundedRect(CanvasRenderingContext2D context, Area area, num cornerRadius, String color){
   context.beginPath();
   context.moveTo(area.x + cornerRadius, area.y);
@@ -36,15 +29,15 @@ void drawRect(CanvasRenderingContext2D context, Area area){
 }
 
 Point getRelativePosition(MouseEvent event, Element element) {
-  num x;
-  num y;
-  if (event.pageX > 0 || event.pageY > 0) {
-      x = event.pageX;
-      y = event.pageY;
+  num x, y;
+
+  if (event.page.x > 0 || event.page.y > 0) {
+      x = event.page.x;
+      y = event.page.y;
   }
   else {
-      x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-      y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+      x = event.client.x + document.body.scrollLeft + document.documentElement.scrollLeft;
+      y = event.client.y + document.body.scrollTop + document.documentElement.scrollTop;
   }
   Point absPosition = getAbsPosition(element);
   x -= absPosition.x;
@@ -54,18 +47,21 @@ Point getRelativePosition(MouseEvent event, Element element) {
 
 // Calculates the object's absolute position
 Point getAbsPosition(Element object){ 
-  Point position = new Point(0, 0);
+  num x, y;
   
   if (object != null) {
-      position.x = object.offsetLeft;
-      position.y = object.offsetTop;
+      x = object.offset.left;
+      y = object.offset.top;
       
       if (object.offsetParent != null) {
           Point parentpos = getAbsPosition(object.offsetParent);
-          position.x += parentpos.x;
-          position.y += parentpos.y;
+          x += parentpos.x;
+          y += parentpos.y;
       }
+  } else {
+    x = 0;
+    y = 0;
   }
   
-  return position;
+  return new Point(x, y);
 }

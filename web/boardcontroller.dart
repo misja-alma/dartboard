@@ -21,22 +21,6 @@ void main() {
   controller.setBoardDimensions();
 }
 
-/// Methods Referenced from Html /////
-void modeSelected(Event event) {
-  controller.modeSelected(event);
-}
-
-List<String> getBoardmodes() {
-  return getAllBoardmodes();
-}
-
-void undo(Event event) {
-  controller.undo();
-}
-
-void newGame(Event event) {
-  controller.newGame();
-}
 
 class BoardController implements Board {
   
@@ -76,8 +60,18 @@ List<List<BGAction>> actions = [];
     Element positionId = query("#positionId");  
     positionId.onBlur.listen((e) => drawFromPositionId());
     positionId.onKeyPress.listen((e) => keyPressedInPositionId(e));
+    
     Element direction = query("#direction");
     direction.onClick.listen((e) => drawFromPositionId());
+    
+    Element undoElement = query("#undo");
+    undoElement.onClick.listen((e) => undo());
+    
+    Element newGameElement = query("#newGame");
+    newGameElement.onClick.listen((e) => newGame());
+    
+    Element editElement = query("#edit");
+    editElement.onClick.listen((e) => editMode());
   }
   
   void drawFromPositionId(){
@@ -95,12 +89,6 @@ List<List<BGAction>> actions = [];
     } else {
       showGnuId(position);
     }
-  }
-  
-  void modeSelected(Event event) {
-    SelectElement select = event.target;
-    print("Switching to ${select.value} mode");
-    currentBoardmode = getBoardmode(select.value);
   }
   
   PositionRecord convertIdToPosition(String selectedIdType) {
@@ -169,12 +157,17 @@ List<List<BGAction>> actions = [];
   }
   
   void newGame() {
+    currentBoardmode = getBoardmode(PLAY_MODE);
     // TODO new game action, instead of selecting mode combo. Also make action for edit mode
     // init pos., throw opening dice and init gamestate, set mode
     currentPosition = new PositionRecord.initialPosition();
     GameState gameState = new GameState.newGame();
     //PlayMode playMode = new Playmode(gameState, currentPosition);
     // TODO playMode.roll, which will/should trigger initial roll
+  }
+  
+  void editMode() {
+    currentBoardmode = getBoardmode(EDIT_MODE);
   }
   
   void handleClick(num x, num y){
