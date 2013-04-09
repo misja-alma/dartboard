@@ -6,8 +6,6 @@ const String AREA_CHECKER = "CHECKER";
 const String AREA_DICE = "DICE";
 const String AREA_CUBE = "CUBE";
 const String AREA_BEAROFF = "BEAROFF";
-const String AREA_UNDO = "UNDO";
-const String AREA_NEWGAME = "NEW GAME";
 
 const String CUBELOCATION_OWNED = "CUBE_OWNED";
 const String CUBELOCATION_MIDDLE = "CUBE_MIDDLE";
@@ -96,7 +94,6 @@ class BoardMap {
   Area cubeMiddle;
   Area cubeOfferedByMe;
   Area cubeOfferedByOpp;
-  Area undo;
   
   BoardMap(double boardX, double boardY, double boardWidth, double boardHeight, bool isHomeBoardLeft){
     x = boardX;
@@ -224,12 +221,6 @@ class BoardMap {
     cubeOfferedByOpp.height = cubeHeight;
     cubeOfferedByOpp.x = board.x + 2 * pointWidth;
     cubeOfferedByOpp.y = board.y + pointHeight;
-    
-    undo = new Area();
-    undo.width = controlsWidth; 
-    undo.height = board.height / 5;
-    undo.x = x;
-    undo.y = board.y;
   }
 
 
@@ -347,14 +338,6 @@ class BoardMap {
           return true;
       }
       return false;
-  }
-  
-  bool locateUndo(Item item, num x, num y){
-    if (this.undo.contains(x, y)) {
-      item.area = AREA_UNDO;
-      return true;
-    }
-    return false;
   }
 
   // Returns the outer-rectangle starting at the topleftcorner of the checker; includes the checker + its insets
@@ -520,9 +503,6 @@ class BoardMap {
           return item;
       }
       
-      if (locateUndo(item, x, y)) {
-        return item;
-      }
       return item;
   }
 }

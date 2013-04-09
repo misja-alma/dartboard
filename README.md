@@ -9,4 +9,4 @@ Improvements:
   Problem 2: cant mix io and html. 
   Only solution seems to be some command line stuff, or maybe a Eclipse plugin.
   Or: have one testsuite which imports all tests (with .. as ..) and calls their main functions.
-- Finish transition to newGame, undo and edit buttons. Remove undo from board.
+- Highlight mode of choice (edit/ game)

@@ -11,7 +11,6 @@ class BgBoard {
   ImageElement pointPattern;
   String myCheckerColor = "#FFFF00";
   String oppCheckerColor = "#00FFFF";
-  String undoColor = "FF0000";
   
   BgBoard() {
     pointPattern = new ImageElement(); 
@@ -109,8 +108,6 @@ class BgBoard {
       cubeArea = boardMap.cubeOpp;
     }
     this.drawCube(context, cubeArea, position.cubeValue);
-    
-    drawUndo(context, boardMap.undo, undoColor);
   }
   
   // index is the bg pointnumber, indexOnPoint starts with 1
@@ -310,34 +307,6 @@ class BgBoard {
     double verticalTextInset = cubeWidth/2 + fontHeight/4;
     context.fillStyle = "#000000";
     context.fillText(cubeValue.toString(), realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
-  }
-  
-  void drawUndo(CanvasRenderingContext2D context, Area undoArea, String color) {
-    double height = undoArea.height;
-    double width = undoArea.width;
-    double x = undoArea.x + width / 12;
-    double y = undoArea.y;
-    
-    context.fillStyle = color;
-    context.beginPath();
-    context.moveTo(x + width / 12, y + height * 5 / 12);
-    context.lineTo(x, y + height / 3);
-    context.lineTo(x, y + height * 2 / 3);
-    context.lineTo(x + width / 3, y + height * 2 / 3);
-    context.lineTo(x + width / 4, y + height * 7 / 12);
-    context.closePath();
-    context.fill();
-    
-    // draw curved part of arrow; 
-    context.beginPath();
-    context.moveTo(x + width / 12, y + height * 5 / 12);
-    context.quadraticCurveTo(x + width * 1.5, y, x + width * 2 / 5, y + height);
-    
-    context.quadraticCurveTo(x + width, y + height / 5, x + width / 4, y + height * 7 / 12);
-    context.moveTo(x + width / 12, y + height * 5 / 12);
-    context.closePath();
-   
-    context.fill();
   }
 }
 

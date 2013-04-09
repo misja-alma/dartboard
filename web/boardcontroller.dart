@@ -172,16 +172,9 @@ List<List<BGAction>> actions = [];
   
   void handleClick(num x, num y){
     Item item = boardMap.locateItem(x, y);
-    if(item.area == AREA_UNDO) {
-      undo();
-    } else 
-    if(item.area == AREA_NEWGAME) {
-      newGame();
-    } else {
-      List<BGAction> performedActions = currentBoardmode.interpretMouseClick(currentPosition, item);
-      performedActions.forEach((action) => action.execute(this));
-      actions.add(performedActions);
-    }
+    List<BGAction> performedActions = currentBoardmode.interpretMouseClick(currentPosition, item);
+    performedActions.forEach((action) => action.execute(this));
+    actions.add(performedActions);
   }
   
   void boardClicked(MouseEvent event){
