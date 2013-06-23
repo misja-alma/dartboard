@@ -14,7 +14,7 @@ class BgBoard {
   
   BgBoard() {
     pointPattern = new ImageElement(); 
-    pointPattern.src = "images/wood.jpg"; // TODO the webui compiler doesn't recognize this path .. So we have to copy the images to the out dir. 
+    pointPattern.src = "images/wood.jpg";  
   }
 
   void setPointPatternImage(pointPatternImage) {
